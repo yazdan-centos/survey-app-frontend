@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHttp } from '../hooks/useHttp';
 import { API_PATHS } from '../config/api';
+import {NavLink} from "react-router-dom";
 
 const metrics = [
   ['totalSurveys', 'کل پیمایش‌ها'],
@@ -44,6 +45,7 @@ export default function DashboardPage() {
             }}
           >
             تلاش مجدد
+
           </button>
         </div>
       ) : !data ? (

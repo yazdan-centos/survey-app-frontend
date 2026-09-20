@@ -3,6 +3,7 @@ import { SurveyProvider, useSurvey } from './context/SurveyContext';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/layout/Header';
+import AdminLayout from './components/layout/AdminLayout';
 import ProfilePage from './pages/ProfilePage';
 import SurveyPage from './pages/SurveyPage';
 import ResultsPage from './pages/ResultsPage';
@@ -75,9 +76,15 @@ function AppShell() {
                         />
                         <Route path="/thank-you" element={<ThankYouPage />} />
                         <Route element={<AdminGuard />}>
+                            <Route element={<AdminLayout />}>
                             <Route path="/dashboard" element={<DashboardPage />} />
                             <Route path="/admin/questions" element={<AdminQuestionsPage />} />
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
+                            <Route path="/admin/users" element={<div className="p-8"><h2 className="text-2xl font-bold">کاربران - به زودی</h2></div>} />
+                            <Route path="/admin/responses" element={<div className="p-8"><h2 className="text-2xl font-bold">پاسخ‌نامه‌ها - به زودی</h2></div>} />
+                            <Route path="/admin/reports" element={<div className="p-8"><h2 className="text-2xl font-bold">گزارش‌گیری - به زودی</h2></div>} />
+                            <Route path="/admin/settings" element={<div className="p-8"><h2 className="text-2xl font-bold">تنظیمات - به زودی</h2></div>} />
+                            </Route>
                         </Route>
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>
