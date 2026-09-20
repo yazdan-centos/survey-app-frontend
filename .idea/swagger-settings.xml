@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SwaggerSettings">
+    <option name="localHubAddress" value="www.api.swagger.com" />
+    <remoteSpecificationUrls>
+      <UrlInfo>
+        <option name="urlString" value="https://api.swaggerhub.com/apis/iranserver/rezz/1.0.0/swagger.yaml" />
+      </UrlInfo>
+      <UrlInfo>
+        <option name="urlString" value="https://api.swaggerhub.com/apis/Trimble-Connect/tcps.internal-qa/2.0/swagger.yaml" />
+      </UrlInfo>
+    </remoteSpecificationUrls>
+  </component>
+</project>
