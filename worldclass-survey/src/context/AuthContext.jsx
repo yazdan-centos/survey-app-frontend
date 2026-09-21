@@ -8,7 +8,12 @@ const AUTH_STORAGE_KEY = 'wcs:auth:v1';
 function readStoredAuth() {
   try {
     const stored = window.sessionStorage.getItem(AUTH_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : { accessToken: null, user: null };
+    const auth = stored ? JSON.parse(stored) : { accessToken: null, user: null };
+    if (auth?.user?.expiresAt && Number(auth.user.expiresAt) <= Date.now()) {
+      window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
+      return { accessToken: null, user: null };
+    }
+    return auth ?? { accessToken: null, user: null };
   } catch {
     return { accessToken: null, user: null };
   }

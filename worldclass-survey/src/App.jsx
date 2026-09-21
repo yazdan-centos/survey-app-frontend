@@ -74,7 +74,14 @@ function AppShell() {
                                 </StepGuard>
                             }
                         />
-                        <Route path="/thank-you" element={<ThankYouPage />} />
+                        <Route
+                            path="/thank-you"
+                            element={
+                                <StepGuard requireRole>
+                                    <ThankYouPage />
+                                </StepGuard>
+                            }
+                        />
                         <Route element={<AdminGuard />}>
                             <Route element={<AdminLayout />}>
                             <Route path="/dashboard" element={<DashboardPage />} />

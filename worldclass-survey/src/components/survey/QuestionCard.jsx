@@ -22,7 +22,26 @@ export default function QuestionCard({
         </div>
       </div>
 
-      <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+      <QuestionTypeRenderer type="maturityLevels" question={question} value={value} onChange={onChange} accentColor={accentColor} />
+
+      {allowSkip && (
+        <div className="mt-3 text-left">
+          <button
+            type="button"
+            onClick={() => onChange('skip')}
+            className={[
+              'rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors',
+              value === 'skip'
+                ? 'border-slate-400 bg-slate-100 text-slate-700'
+                : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600',
+            ].join(' ')}
+          >
+            اطلاعات کافی برای ارزیابی این موضوع ندارم
+          </button>
+        </div>
+      )}
+
+      <div className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
         <button
           type="button"
           onClick={onBack}
@@ -42,25 +61,6 @@ export default function QuestionCard({
           <ArrowLeft size={16} />
         </button>
       </div>
-
-      <QuestionTypeRenderer type="maturityLevels" question={question} value={value} onChange={onChange} accentColor={accentColor} />
-
-      {allowSkip && (
-        <div className="mt-3 text-left">
-          <button
-            type="button"
-            onClick={() => onChange('skip')}
-            className={[
-              'rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors',
-              value === 'skip'
-                ? 'border-slate-400 bg-slate-100 text-slate-700'
-                : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600',
-            ].join(' ')}
-          >
-            اطلاعات کافی برای ارزیابی این موضوع ندارم
-          </button>
-        </div>
-      )}
     </div>
   );
 }

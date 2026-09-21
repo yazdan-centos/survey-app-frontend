@@ -81,8 +81,9 @@ export function SurveyProvider({ children }) {
   }, [clearState, navigate]);
 
   const finishSurvey = useCallback(() => {
+    setState((prev) => ({ ...prev, submittedAt: prev.submittedAt ?? new Date().toISOString() }));
     navigate(stepToPath('thank-you'));
-  }, [navigate]);
+  }, [navigate, setState]);
 
   // --- Step sequencing helpers -------------------------------------------------
   const stepOrder = useMemo(

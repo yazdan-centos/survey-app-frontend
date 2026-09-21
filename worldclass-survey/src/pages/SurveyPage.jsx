@@ -6,7 +6,7 @@ import ProgressBar from '../components/layout/ProgressBar';
 import QuestionCard from '../components/survey/QuestionCard';
 
 export default function SurveyPage({ dimensionKey }) {
-  const { state, role, dimensionsWithQuestions, answerQuestion, goToStep, progressPercent } =
+  const { state, role, dimensionsWithQuestions, answerQuestion, goToStep, finishSurvey, progressPercent } =
       useSurvey();
   const [questionPage, setQuestionPage] = useState({ dimensionKey, index: 0 });
 
@@ -30,7 +30,7 @@ export default function SurveyPage({ dimensionKey }) {
     if (!isLastQuestion) {
       setQuestionPage({ dimensionKey, index: questionIndex + 1 });
     } else if (isLast) {
-      goToStep('results');
+      finishSurvey();
     } else {
       goToStep(DIMENSIONS[dimIndex + 1].key);
     }
@@ -48,8 +48,11 @@ export default function SurveyPage({ dimensionKey }) {
 
   return (
       <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-        <div className="mb-6 space-y-4">
+        <div className="mb-4">
           <DimensionStepper activeKey={dimensionKey} />
+        </div>
+
+        <div className="sticky top-0 z-30 -mx-4 mb-6 border-y border-slate-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:-mx-6 sm:px-6">
           <ProgressBar percent={progressPercent} label="پیشرفت کلی پیمایش" />
         </div>
 
@@ -75,7 +78,7 @@ export default function SurveyPage({ dimensionKey }) {
             nextDisabled={!hasCurrentAnswer}
             nextLabel={
               isLastQuestion
-                  ? (isLast ? 'مشاهده نتایج' : 'بُعد بعدی')
+                  ? (isLast ? 'پایان' : 'بُعد بعدی')
                   : 'بعدی'
             }
         />
