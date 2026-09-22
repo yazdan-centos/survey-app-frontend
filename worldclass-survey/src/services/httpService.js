@@ -12,9 +12,12 @@ export class HttpError extends Error {
 async function readResponse(response) {
   if (response.status === 204) return null;
 
+  const text = await response.text();
+  if (!text.trim()) return null;
+
   const contentType = response.headers.get('content-type') || '';
-  if (contentType.includes('application/json')) return response.json();
-  return response.text();
+  if (contentType.includes('json')) return JSON.parse(text);
+  return text;
 }
 
 export async function httpRequest(path, options = {}) {
@@ -44,7 +47,14 @@ export async function httpRequest(path, options = {}) {
     throw new HttpError('Unable to connect to the server', 0, null);
   }
 
-  const data = await readResponse(response);
+  let data;
+  try {
+    data = await readResponse(response);
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    // Keep the HTTP status so a malformed 401 still follows the sign-out flow.
+    throw new HttpError('پاسخ سرور JSON معتبری نیست. لطفاً دوباره تلاش کنید.', response.status, null);
+  }
 
   if (!response.ok) {
     const message = data?.message || data?.error || `Request failed with status ${response.status}`;

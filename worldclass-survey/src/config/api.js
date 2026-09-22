@@ -27,11 +27,9 @@ export const API_PATHS = {
   activeSurvey: '/api/v1/surveys/active',  // Get active survey (from ENDPOINTS.md)
   survey: (surveyId) => `/api/v1/surveys/${surveyId}`,  // Survey by ID (from ENDPOINTS.md)
   
-  // Admin Survey Management (actual backend implementation)
-  adminSurveys: '/api/v1/admin/surveys',
-  adminSurvey: (id) => `/api/v1/admin/surveys/${id}`,
-  adminSurveyActivate: (id) => `/api/v1/admin/surveys/${id}/activate`,
-  adminSurveyDeactivate: (id) => `/api/v1/admin/surveys/${id}/deactivate`,
+  // SurveyController serves both survey listing and management on these paths.
+  adminSurveys: '/api/v1/surveys',
+  adminSurvey: (id) => `/api/v1/surveys/${id}`,
 
   // Users
   users: '/api/users',

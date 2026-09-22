@@ -7,42 +7,39 @@ import { API_PATHS } from '../config/api';
  * and routes 401s through AuthContext's sign-out flow.
  */
 
-export function listSurveys(request, { status } = {}) {
-  const query = status && status !== 'all' ? `?status=${encodeURIComponent(status)}` : '';
-  return request(`${API_PATHS.adminSurveys}${query}`, { method: 'GET' });
+function normalizeSurvey(survey) {
+  return { ...survey, status: survey.active ? 'active' : 'inactive' };
 }
 
-export function getSurvey(request, id) {
-  return request(API_PATHS.adminSurvey(id), { method: 'GET' });
+export async function listSurveys(request, { status, signal } = {}) {
+  const data = await request(API_PATHS.adminSurveys, { method: 'GET', signal });
+  if (!Array.isArray(data)) throw new Error('ساختار فهرست پیمایش‌ها معتبر نیست.');
+  const surveys = data.map(normalizeSurvey);
+  // The backend lists all surveys; it does not accept a status filter.
+  return status && status !== 'all' ? surveys.filter((survey) => survey.status === status) : surveys;
 }
 
-export function createSurvey(request, payload) {
-  return request(API_PATHS.adminSurveys, {
+export async function createSurvey(request, payload) {
+  const data = await request(API_PATHS.adminSurveys, {
     method: 'POST',
-    body: payload,
+    body: { title: payload.title, version: payload.version, active: false },
   });
+  return normalizeSurvey(data);
 }
 
-export function updateSurvey(request, id, payload) {
-  return request(API_PATHS.adminSurvey(id), {
+export async function updateSurvey(request, id, payload) {
+  const data = await request(API_PATHS.adminSurvey(id), {
     method: 'PUT',
-    body: payload,
+    body: { title: payload.title, version: payload.version, active: payload.active },
   });
+  return normalizeSurvey(data);
 }
 
 export function deleteSurvey(request, id) {
   return request(API_PATHS.adminSurvey(id), { method: 'DELETE' });
 }
 
-export function activateSurvey(request, id) {
-  return request(API_PATHS.adminSurveyActivate(id), { method: 'POST' });
-}
-
-export function deactivateSurvey(request, id) {
-  return request(API_PATHS.adminSurveyDeactivate(id), { method: 'POST' });
-}
-
-/** Convenience: flips whichever state the survey is currently in. */
-export function setSurveyActive(request, id, isActive) {
-  return isActive ? activateSurvey(request, id) : deactivateSurvey(request, id);
+export function setSurveyActive(request, survey, active) {
+  // UpdateSurveyRequest requires title and version even when only active changes.
+  return updateSurvey(request, survey.id, { title: survey.title, version: survey.version, active });
 }

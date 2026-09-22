@@ -1,8 +1,5 @@
 import { Loader2, Pencil, Power, PowerOff, Trash2 } from 'lucide-react';
 import SurveyStatusBadge from './SurveyStatusBadge';
-import { ROLES } from '../../data/roles';
-
-const roleLabel = (id) => ROLES.find((r) => r.id === id)?.label ?? id;
 
 function formatDate(value) {
   if (!value) return '—';
@@ -23,13 +20,13 @@ export default function SurveyTable({ surveys, pendingId, onEdit, onToggleActive
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
       <table className="w-full text-right text-sm">
         <thead className="bg-slate-50 text-xs font-semibold text-slate-500">
           <tr>
             <th className="px-4 py-3">عنوان</th>
-            <th className="px-4 py-3">گروه‌های هدف</th>
-            <th className="px-4 py-3">بازه زمانی</th>
+            <th className="px-4 py-3">نسخه</th>
+            <th className="px-4 py-3">تاریخ ایجاد</th>
             <th className="px-4 py-3">وضعیت</th>
             <th className="px-4 py-3">عملیات</th>
           </tr>
@@ -42,17 +39,12 @@ export default function SurveyTable({ surveys, pendingId, onEdit, onToggleActive
               <tr key={survey.id} className="align-top">
                 <td className="px-4 py-3">
                   <div className="font-medium text-slate-900">{survey.title}</div>
-                  {survey.description && (
-                    <div className="mt-0.5 max-w-xs truncate text-xs text-slate-500">{survey.description}</div>
-                  )}
                 </td>
                 <td className="px-4 py-3 text-xs text-slate-600">
-                  {survey.targetRoles?.length
-                    ? survey.targetRoles.map(roleLabel).join('، ')
-                    : 'همه گروه‌ها'}
+                  {survey.version || '—'}
                 </td>
                 <td className="px-4 py-3 text-xs text-slate-600">
-                  {formatDate(survey.startDate)} تا {formatDate(survey.endDate)}
+                  {formatDate(survey.createdAt)}
                 </td>
                 <td className="px-4 py-3">
                   <SurveyStatusBadge status={survey.status} />

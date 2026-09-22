@@ -8,7 +8,6 @@ export const SURVEY_STATUS = {
 
 export const SURVEY_STATUS_FILTER_OPTIONS = [
   { value: 'all', label: 'همه وضعیت‌ها' },
-  { value: 'draft', label: SURVEY_STATUS.draft.label },
   { value: 'active', label: SURVEY_STATUS.active.label },
   { value: 'inactive', label: SURVEY_STATUS.inactive.label },
 ];

@@ -34,6 +34,34 @@ Other users start the survey profile step at `/`. Saved pre-login destinations
 do not override these landing pages. Dashboard and admin routes require admin
 status in the frontend; the backend remains responsible for API authorization.
 
+`/admin/surveys` uses `GET`/`POST /api/v1/surveys` and
+`PUT`/`DELETE /api/v1/surveys/{id}`, matching `SurveyController`. Survey fields
+are `title`, `version`, and boolean `active`; status filtering is local.
+Activation uses `PUT` with the existing title/version and the new `active`
+value. There is no `/api/v1/admin/surveys` or dedicated activation endpoint.
+The HTTP hook continues to sign out on 401 responses.
+
+`/admin/users` provides user creation, editing, confirmed deletion, and local
+search, access filtering, and pagination over `GET /api/users`. Writes use
+`POST /api/users`, `PUT /api/users/{id}`, and `DELETE /api/users/{id}` through
+the authenticated HTTP hook. The form assumes `id`, `username`, `fullName`,
+`email`, and boolean `isAdmin` fields. Creation requires `password`; editing
+omits a blank password to preserve the current one. These field assumptions
+need confirmation against the backend DTO because `ENDPOINTS.md` documents
+routes only. Listing accepts an array or an `items`/`content` array wrapper;
+the all-users endpoint must return the complete collection for local filtering.
+
+`/admin/responses` shows survey/audience response counts from
+`GET /api/surveys/dashboard` and looks up individual responses through
+`GET /api/survey-responses/{responseId}`. It follows the backend's
+`SurveyResponseDetails` DTO (`id`, `role`, `respondentUsername`, `submittedAt`,
+`answers`, `demographics`, and audit timestamps). Answers contain `questionId`,
+`selectedLevel`, and `skipped`; demographics contain `fieldKey` and `value`.
+Question text is loaded from each known survey's question endpoint, with IDs
+shown when that text is unavailable. Details support answer search, filtering,
+pagination, and JSON download. This is a read-only review page: the current
+backend has no endpoint listing individual responses or deleting them.
+
 The frontend connects to `http://localhost:8080` by default. Copy `.env.example`
 to `.env.local` to override the server URL.
 

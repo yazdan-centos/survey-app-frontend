@@ -41,23 +41,25 @@ export default function AdminSurveysPage() {
     return () => clearTimeout(timer);
   }, [notice]);
 
-  const visibleSurveys = useMemo(() => surveys, [surveys]);
+  const visibleSurveys = useMemo(() => surveys.filter((survey) => statusFilter === 'all' || survey.status === statusFilter), [surveys, statusFilter]);
 
   const handleCreateOrUpdate = async (payload) => {
     setSubmitting(true);
     try {
       if (editingSurvey) {
-        const updated = await adminSurveyService.updateSurvey(request, editingSurvey.id, payload);
+        const updated = await adminSurveyService.updateSurvey(request, editingSurvey.id, { ...payload, active: editingSurvey.active });
         setSurveys((current) => current.map((s) => (s.id === editingSurvey.id ? { ...s, ...updated } : s)));
         setNotice({ type: 'success', text: 'پیمایش با موفقیت به‌روزرسانی شد.' });
         setEditingSurvey(null);
       } else {
         const created = await adminSurveyService.createSurvey(request, payload);
         setSurveys((current) => [created, ...current]);
-        setNotice({ type: 'success', text: 'پیمایش جدید به‌عنوان پیش‌نویس ایجاد شد.' });
+        setNotice({ type: 'success', text: 'پیمایش جدید به‌صورت غیرفعال ایجاد شد.' });
       }
+      return true;
     } catch (error) {
       setNotice({ type: 'error', text: error.message || 'ذخیره پیمایش با خطا مواجه شد.' });
+      return false;
     } finally {
       setSubmitting(false);
     }
@@ -67,7 +69,7 @@ export default function AdminSurveysPage() {
     const nextActive = survey.status !== 'active';
     setPendingId(survey.id);
     try {
-      const updated = await adminSurveyService.setSurveyActive(request, survey.id, nextActive);
+      const updated = await adminSurveyService.setSurveyActive(request, survey, nextActive);
       setSurveys((current) =>
         current.map((s) => (s.id === survey.id ? { ...s, ...updated, status: updated?.status ?? (nextActive ? 'active' : 'inactive') } : s))
       );
@@ -103,7 +105,7 @@ export default function AdminSurveysPage() {
         <div>
           <h2 className="text-2xl font-bold text-slate-900">مدیریت پیمایش‌ها</h2>
           <p className="mt-2 text-sm text-slate-500">
-            پیمایش جدید بسازید، آن را برای گروه‌های پاسخ‌دهنده هدف تنظیم کنید و هر زمان لازم بود فعال یا غیرفعالش کنید.
+            پیمایش جدید بسازید، عنوان و نسخه آن را ویرایش کنید و هر زمان لازم بود فعال یا غیرفعالش کنید.
           </p>
         </div>
         <button
@@ -128,7 +130,7 @@ export default function AdminSurveysPage() {
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div>
+        <div className="min-w-0">
           <div className="mb-3 flex items-center gap-2">
             <label className="text-xs font-medium text-slate-600">فیلتر وضعیت:</label>
             <select

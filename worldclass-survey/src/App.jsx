@@ -13,6 +13,8 @@ import AdminQuestionsPage from './pages/AdminQuestionsPage';
 import AdminSurveysPage from './pages/AdminSurveysPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import UsersPage from './pages/UsersPage';
+import ResponsesPage from './pages/ResponsesPage';
 import { useAuth } from './hooks/useAuth';
 import { getPostLoginPath, isAdmin } from './utils/auth';
 
@@ -87,8 +89,8 @@ function AppShell() {
                             <Route path="/dashboard" element={<DashboardPage />} />
                             <Route path="/admin/questions" element={<AdminQuestionsPage />} />
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
-                            <Route path="/admin/users" element={<div className="p-8"><h2 className="text-2xl font-bold">کاربران - به زودی</h2></div>} />
-                            <Route path="/admin/responses" element={<div className="p-8"><h2 className="text-2xl font-bold">پاسخ‌نامه‌ها - به زودی</h2></div>} />
+                            <Route path="/admin/users" element={<UsersPage />} />
+                            <Route path="/admin/responses" element={<ResponsesPage />} />
                             <Route path="/admin/reports" element={<div className="p-8"><h2 className="text-2xl font-bold">گزارش‌گیری - به زودی</h2></div>} />
                             <Route path="/admin/settings" element={<div className="p-8"><h2 className="text-2xl font-bold">تنظیمات - به زودی</h2></div>} />
                             </Route>
