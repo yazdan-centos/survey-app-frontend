@@ -24,7 +24,7 @@ export default function ExportButtons({ dashboardRef, role, demographics, dimens
             <button
                 type="button"
                 onClick={handleJsonExport}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
             >
                 <FileJson size={16} />
                 دریافت JSON

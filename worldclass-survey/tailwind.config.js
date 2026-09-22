@@ -2,6 +2,7 @@
 import { PRIMARY, CHARCOAL } from './src/theme/colors.js';
 
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {

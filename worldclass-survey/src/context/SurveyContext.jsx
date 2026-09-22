@@ -13,6 +13,7 @@ const initialState = {
   roleId: null,
   demographics: {},
   answers: {}, // { [questionCode]: 1 | 2 | 3 | 4 | 'skip' }
+  managerGuideSeen: false,
   submittedAt: null,
 };
 
@@ -64,6 +65,10 @@ export function SurveyProvider({ children }) {
     },
     [setState]
   );
+
+  const acknowledgeManagerGuide = useCallback(() => {
+    setState((prev) => ({ ...prev, managerGuideSeen: true }));
+  }, [setState]);
 
   const goToStep = useCallback(
     (step) => {
@@ -162,6 +167,7 @@ export function SurveyProvider({ children }) {
     setRole,
     setDemographics,
     answerQuestion,
+    acknowledgeManagerGuide,
     goToStep,
     resetSurvey,
     finishSurvey,

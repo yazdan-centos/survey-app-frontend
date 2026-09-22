@@ -53,7 +53,7 @@ export default function DemographicForm({ demoKey, defaultValues, onValid }) {
           </legend>
           {currentQuestion.type === 'select' ? (
               <select
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
                   {...register(fieldName, { required: true })}
               >
                 <option value="" disabled>
@@ -70,7 +70,7 @@ export default function DemographicForm({ demoKey, defaultValues, onValid }) {
                 {currentQuestion.options.map((opt) => (
                     <label
                         key={opt}
-                        className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 has-[:checked]:border-primary-700 has-[:checked]:bg-primary-50 has-[:checked]:text-primary-900"
+                        className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 has-[:checked]:border-primary-700 has-[:checked]:bg-primary-50 has-[:checked]:text-primary-900"
                     >
                       <input
                           type="radio"
@@ -90,12 +90,12 @@ export default function DemographicForm({ demoKey, defaultValues, onValid }) {
           )}
         </fieldset>
 
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+        <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
           <button
               type="button"
               onClick={handlePrevious}
               disabled={isFirstPage}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronRight size={16} />
             قبلی
@@ -122,7 +122,7 @@ export default function DemographicForm({ demoKey, defaultValues, onValid }) {
               <button
                   type="button"
                   onClick={handleNext}
-                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
               >
                 بعدی
                 <ChevronLeft size={16} />

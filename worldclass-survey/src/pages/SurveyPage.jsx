@@ -4,9 +4,10 @@ import { DIMENSIONS } from '../data/dimensions';
 import DimensionStepper from '../components/layout/DimensionStepper';
 import ProgressBar from '../components/layout/ProgressBar';
 import QuestionCard from '../components/survey/QuestionCard';
+import ManagerGuide from '../components/guides/ManagerGuide';
 
 export default function SurveyPage({ dimensionKey }) {
-  const { state, role, dimensionsWithQuestions, answerQuestion, goToStep, finishSurvey, progressPercent } =
+  const { state, role, dimensionsWithQuestions, answerQuestion, acknowledgeManagerGuide, goToStep, finishSurvey, progressPercent } =
       useSurvey();
   const [questionPage, setQuestionPage] = useState({ dimensionKey, index: 0 });
 
@@ -17,6 +18,13 @@ export default function SurveyPage({ dimensionKey }) {
   const isLast = dimIndex === DIMENSIONS.length - 1;
 
   if (!dimension) return null;
+
+  const shouldShowManagerGuide =
+    isFirst && !state.managerGuideSeen && Object.keys(state.answers).length === 0;
+
+  if (shouldShowManagerGuide) {
+    return <ManagerGuide onContinue={acknowledgeManagerGuide} />;
+  }
 
   const questionIndex = questionPage.dimensionKey === dimensionKey ? questionPage.index : 0;
   const currentQuestion = dimension.questions[questionIndex];
@@ -52,7 +60,7 @@ export default function SurveyPage({ dimensionKey }) {
           <DimensionStepper activeKey={dimensionKey} />
         </div>
 
-        <div className="sticky top-0 z-30 -mx-4 mb-6 border-y border-slate-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:-mx-6 sm:px-6">
+        <div className="sticky top-0 z-30 -mx-4 mb-6 border-y border-slate-200 dark:border-slate-700 bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:-mx-6 sm:px-6">
           <ProgressBar percent={progressPercent} label="پیشرفت کلی پیمایش" />
         </div>
 
@@ -63,7 +71,7 @@ export default function SurveyPage({ dimensionKey }) {
         >
           بُعد {dimIndex + 1} از {DIMENSIONS.length}
         </span>
-          <h2 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{dimension.label}</h2>
+          <h2 className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-100 sm:text-2xl">{dimension.label}</h2>
         </div>
 
         <QuestionCard

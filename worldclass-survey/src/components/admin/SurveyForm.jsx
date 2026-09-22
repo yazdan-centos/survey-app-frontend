@@ -43,7 +43,7 @@ export default function SurveyForm({ editingSurvey, onSubmit, onCancelEdit, subm
   const isEditing = Boolean(editingSurvey);
 
   return (
-    <form onSubmit={submit} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5" noValidate>
+    <form onSubmit={submit} className="space-y-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5" noValidate>
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-800">
           {isEditing ? 'ویرایش پیمایش' : 'ایجاد پیمایش جدید'}
@@ -52,7 +52,7 @@ export default function SurveyForm({ editingSurvey, onSubmit, onCancelEdit, subm
           <button
             type="button"
             onClick={onCancelEdit}
-            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-slate-500 hover:bg-slate-50"
+            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             <X size={14} /> انصراف از ویرایش
           </button>
@@ -60,27 +60,27 @@ export default function SurveyForm({ editingSurvey, onSubmit, onCancelEdit, subm
       </div>
 
       <div>
-        <label htmlFor="survey-title" className="mb-1 block text-xs font-medium text-slate-600">عنوان پیمایش</label>
+        <label htmlFor="survey-title" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">عنوان پیمایش</label>
         <input
           id="survey-title"
           disabled={submitting}
           maxLength={200}
           {...register('title', { validate: (value) => Boolean(value.trim()) || 'عنوان الزامی است', maxLength: 200 })}
           placeholder="مثلاً: ارزیابی کلاس جهانی — سه‌ماهه سوم ۱۴۰۴"
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+          className="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
         />
         {errors.title && <p className="mt-1 text-xs text-rose-600">{errors.title.message}</p>}
       </div>
 
       <div>
-        <label htmlFor="survey-version" className="mb-1 block text-xs font-medium text-slate-600">نسخه پیمایش</label>
+        <label htmlFor="survey-version" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">نسخه پیمایش</label>
         <input
           id="survey-version"
           disabled={submitting}
           maxLength={50}
           {...register('version', { validate: (value) => Boolean(value.trim()) || 'نسخه الزامی است', maxLength: 50 })}
           placeholder="مثلاً: 1405-Q3"
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+          className="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
         />
         {errors.version && <p className="mt-1 text-xs text-rose-600">{errors.version.message}</p>}
       </div>

@@ -25,13 +25,13 @@ export default function LevelDistribution({ distribution }) {
         const percent = Math.round((count / total) * 100);
         return (
           <div key={k}>
-            <div className="mb-1 flex items-center justify-between text-xs font-medium text-slate-600">
+            <div className="mb-1 flex items-center justify-between text-xs font-medium text-slate-600 dark:text-slate-400">
               <span>{LABELS[k]}</span>
               <span>
                 {count} پاسخ ({percent}%)
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{ width: `${percent}%`, backgroundColor: COLORS[k] }}

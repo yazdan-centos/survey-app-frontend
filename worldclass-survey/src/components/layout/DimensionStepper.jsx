@@ -27,8 +27,8 @@ export default function DimensionStepper({ activeKey }) {
                       isActive
                           ? 'border-primary-700 bg-primary-700 text-white'
                           : complete
-                              ? 'border-primary-700 bg-white text-primary-700'
-                              : 'border-slate-300 bg-white text-slate-400',
+                              ? 'border-primary-700 bg-white dark:bg-slate-900 text-primary-700'
+                              : 'border-slate-300 bg-white dark:bg-slate-900 text-slate-400',
                       reachable ? 'cursor-pointer' : 'cursor-not-allowed',
                     ].join(' ')}
                     title={dim.label}

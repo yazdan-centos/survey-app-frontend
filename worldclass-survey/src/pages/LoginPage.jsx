@@ -26,28 +26,28 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-12 sm:px-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-2xl font-bold text-slate-900">ورود</h2>
-        <p className="mt-2 text-sm text-slate-500">برای ادامه، وارد حساب کاربری خود شوید.</p>
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">ورود</h2>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">برای ادامه، وارد حساب کاربری خود شوید.</p>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <label className="block text-sm font-medium text-slate-700">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             نام کاربری
             <input
               required
               value={credentials.username}
               onChange={(event) => setCredentials((current) => ({ ...current, username: event.target.value }))}
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm"
               autoComplete="username"
             />
           </label>
-          <label className="block text-sm font-medium text-slate-700">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             رمز عبور
             <input
               required
               type="password"
               value={credentials.password}
               onChange={(event) => setCredentials((current) => ({ ...current, password: event.target.value }))}
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm"
               autoComplete="current-password"
             />
           </label>

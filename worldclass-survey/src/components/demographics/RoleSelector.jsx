@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 export default function RoleSelector({ value, onChange }) {
     return (
         <fieldset>
-            <legend className="mb-3 text-sm font-semibold text-slate-700">
+            <legend className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">
                 نقش شما در ارتباط با شرکت کدام است؟
             </legend>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -20,7 +20,7 @@ export default function RoleSelector({ value, onChange }) {
                                 'relative flex flex-col items-start gap-1 rounded-xl border p-4 text-right transition-all',
                                 selected
                                     ? 'border-primary-700 bg-primary-50 ring-1 ring-primary-700'
-                                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50',
+                                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
                             ].join(' ')}
                         >
                             {selected && (
@@ -28,8 +28,8 @@ export default function RoleSelector({ value, onChange }) {
                   <Check size={12} strokeWidth={3} />
                 </span>
                             )}
-                            <span className="font-semibold text-slate-900">{role.label}</span>
-                            <span className="text-xs text-slate-500">{role.description}</span>
+                            <span className="font-semibold text-slate-900 dark:text-slate-100">{role.label}</span>
+                            <span className="text-xs text-slate-500 dark:text-slate-400">{role.description}</span>
                         </button>
                     );
                 })}

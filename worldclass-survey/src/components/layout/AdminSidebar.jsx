@@ -57,11 +57,11 @@ const navigationItems = [
 
 export default function AdminSidebar({ onNavigate }) {
   return (
-    <nav className="flex h-full flex-col overflow-y-auto p-4 pt-6 lg:pt-4">
+    <nav className="flex h-full flex-col overflow-y-auto bg-white p-4 pt-6 dark:bg-slate-900 lg:pt-4">
       {/* Sidebar header */}
-      <div className="mb-6 border-b border-slate-200 pb-4">
-        <h2 className="text-lg font-bold text-slate-900">پنل مدیریت</h2>
-        <p className="mt-1 text-xs text-slate-500">سیستم ارزیابی کلاس جهانی</p>
+      <div className="mb-6 border-b border-slate-200 pb-4 dark:border-slate-800">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">پنل مدیریت</h2>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">سیستم ارزیابی کلاس جهانی</p>
       </div>
 
       {/* Navigation items */}
@@ -75,7 +75,7 @@ export default function AdminSidebar({ onNavigate }) {
                 `group relative flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ` +
                 (isActive
                   ? 'bg-gradient-to-r from-primary-800 to-primary-700 text-white shadow-lg shadow-primary-800/25'
-                  : 'text-slate-700 hover:bg-slate-50 hover:text-primary-700 hover:shadow-md hover:shadow-slate-200/50')
+                  : 'text-slate-700 hover:bg-slate-50 hover:text-primary-700 hover:shadow-md hover:shadow-slate-200/50 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-primary-400 dark:hover:shadow-none')
               }
             >
               {({ isActive }) => (
@@ -92,7 +92,7 @@ export default function AdminSidebar({ onNavigate }) {
                     <div className={`truncate ` + (isActive ? 'font-bold' : '')}>{label}</div>
                     <div
                       className={`truncate text-xs transition-opacity duration-200 ` +
-                        (isActive ? 'text-primary-100 opacity-90' : 'text-slate-500 opacity-0 group-hover:opacity-100')
+                        (isActive ? 'text-primary-100 opacity-90' : 'text-slate-500 opacity-0 group-hover:opacity-100 dark:text-slate-400')
                       }
                     >
                       {description}
@@ -124,10 +124,10 @@ export default function AdminSidebar({ onNavigate }) {
       </ul>
 
       {/* Sidebar footer */}
-      <div className="mt-auto border-t border-slate-200 pt-4">
-        <div className="rounded-lg bg-slate-50 p-3">
-          <p className="text-xs font-semibold text-slate-700">نسخه سیستم</p>
-          <p className="mt-0.5 text-xs text-slate-500">1.0.0</p>
+      <div className="mt-auto border-t border-slate-200 pt-4 dark:border-slate-800">
+        <div className="rounded-lg bg-slate-50 p-3 dark:bg-slate-800">
+          <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">نسخه سیستم</p>
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">1.0.0</p>
         </div>
       </div>
     </nav>

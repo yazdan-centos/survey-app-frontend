@@ -10,7 +10,7 @@ export default function LevelCard({ levelIndex, text, selected, onSelect, accent
         'flex h-full flex-col items-start gap-2 rounded-xl border p-4 text-right text-sm transition-all',
         selected
           ? 'border-transparent bg-slate-900 text-white shadow-md'
-          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50',
+          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
       ].join(' ')}
     >
       <span

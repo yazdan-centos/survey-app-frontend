@@ -103,8 +103,8 @@ export default function AdminSurveysPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">مدیریت پیمایش‌ها</h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">مدیریت پیمایش‌ها</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
             پیمایش جدید بسازید، عنوان و نسخه آن را ویرایش کنید و هر زمان لازم بود فعال یا غیرفعالش کنید.
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function AdminSurveysPage() {
           type="button"
           onClick={loadSurveys}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-60"
         >
           {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCcw size={14} />}
           به‌روزرسانی فهرست
@@ -132,11 +132,11 @@ export default function AdminSurveysPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0">
           <div className="mb-3 flex items-center gap-2">
-            <label className="text-xs font-medium text-slate-600">فیلتر وضعیت:</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-400">فیلتر وضعیت:</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+              className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 text-xs focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
             >
               {SURVEY_STATUS_FILTER_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -157,7 +157,7 @@ export default function AdminSurveysPage() {
               </div>
             </div>
           ) : loading ? (
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-10 text-sm text-slate-500">
+            <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-sm text-slate-500 dark:text-slate-400">
               <Loader2 size={16} className="animate-spin" /> در حال بارگذاری پیمایش‌ها...
             </div>
           ) : (

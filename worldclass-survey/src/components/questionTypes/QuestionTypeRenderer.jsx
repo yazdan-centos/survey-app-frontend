@@ -14,7 +14,7 @@ function LikertInput({ question, value, onChange }) {
             role="radio"
             aria-checked={selected}
             onClick={() => onChange(score)}
-            className={`rounded-xl border px-3 py-3 text-center text-sm font-semibold transition-colors ${selected ? 'border-primary-800 bg-primary-800 text-white' : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-primary-300 hover:bg-primary-50'}`}
+            className={`rounded-xl border px-3 py-3 text-center text-sm font-semibold transition-colors ${selected ? 'border-primary-800 bg-primary-800 text-white' : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-primary-300 hover:bg-primary-50'}`}
           >
             <span className="block text-lg">{score}</span>
             <span className="mt-1 block text-xs">{label}</span>
@@ -37,7 +37,7 @@ export default function QuestionTypeRenderer({ type, question, value, onChange, 
     );
   }
   if (type === 'text') {
-    return <textarea value={value || ''} onChange={(event) => onChange(event.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" />;
+    return <textarea value={value || ''} onChange={(event) => onChange(event.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm" />;
   }
   return null;
 }

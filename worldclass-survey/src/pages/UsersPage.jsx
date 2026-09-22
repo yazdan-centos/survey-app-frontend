@@ -6,7 +6,7 @@ import * as userService from '../services/userService';
 import { isAdmin } from '../utils/auth';
 
 const PAGE_SIZE = 10;
-const buttonClass = 'inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50';
+const buttonClass = 'inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50';
 const normalize = (value) => String(value ?? '').replace(/ي/g, 'ی').replace(/ك/g, 'ک').toLocaleLowerCase().trim();
 
 export default function UsersPage() {
@@ -118,8 +118,8 @@ export default function UsersPage() {
     <div dir="rtl" className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">مدیریت کاربران</h2>
-          <p className="mt-2 text-sm text-slate-500">کاربران را جستجو کنید، اطلاعات آن‌ها را ویرایش کنید و دسترسی مدیر را تنظیم کنید.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">مدیریت کاربران</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">کاربران را جستجو کنید، اطلاعات آن‌ها را ویرایش کنید و دسترسی مدیر را تنظیم کنید.</p>
         </div>
         <button type="button" onClick={loadUsers} disabled={loading || busy} className={buttonClass}>
           {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCcw size={14} />}
@@ -138,15 +138,15 @@ export default function UsersPage() {
         <section className="min-w-0" aria-label="فهرست کاربران" aria-busy={loading}>
           <div className="mb-4 flex flex-wrap gap-3">
             <div className="min-w-0 flex-1 basis-56">
-              <label htmlFor="users-search" className="mb-1 block text-xs font-medium text-slate-600">جستجوی کاربران</label>
+              <label htmlFor="users-search" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">جستجوی کاربران</label>
               <div className="relative">
                 <Search size={16} className="pointer-events-none absolute right-3 top-3 text-slate-400" />
-                <input id="users-search" type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="نام، نام کاربری یا ایمیل" className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-3 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-primary-700" />
+                <input id="users-search" type="search" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="نام، نام کاربری یا ایمیل" className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 py-2 pl-3 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-primary-700" />
               </div>
             </div>
             <div>
-              <label htmlFor="users-role" className="mb-1 block text-xs font-medium text-slate-600">نوع دسترسی</label>
-              <select id="users-role" value={role} onChange={(event) => { setRole(event.target.value); setPage(1); }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm">
+              <label htmlFor="users-role" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">نوع دسترسی</label>
+              <select id="users-role" value={role} onChange={(event) => { setRole(event.target.value); setPage(1); }} className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
                 <option value="all">همه کاربران</option>
                 <option value="admin">مدیر سیستم</option>
                 <option value="user">کاربر عادی</option>
@@ -160,26 +160,26 @@ export default function UsersPage() {
               <button type="button" onClick={loadUsers} disabled={busy} className="mt-3 font-semibold underline disabled:opacity-50">تلاش مجدد</button>
             </div>
           ) : loading ? (
-            <div role="status" className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-10 text-sm text-slate-500"><Loader2 size={18} className="animate-spin" />در حال بارگذاری کاربران...</div>
+            <div role="status" className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-sm text-slate-500 dark:text-slate-400"><Loader2 size={18} className="animate-spin" />در حال بارگذاری کاربران...</div>
           ) : filteredUsers.length === 0 ? (
-            <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-center text-sm text-slate-500 dark:text-slate-400">
               <Users size={32} className="mx-auto mb-3 text-slate-400" />
               {users.length === 0 ? 'هنوز کاربری ثبت نشده است.' : 'کاربری با این مشخصات یافت نشد.'}
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
               <div className="overflow-x-auto">
                 <table className="w-full text-right text-sm">
                   <caption className="sr-only">فهرست کاربران و دسترسی‌ها</caption>
-                  <thead className="bg-slate-50 text-xs text-slate-600">
+                  <thead className="bg-slate-50 dark:bg-slate-800 text-xs text-slate-600 dark:text-slate-400">
                     <tr>{['کاربر', 'ایمیل', 'دسترسی', 'عملیات'].map((title) => <th key={title} scope="col" className="whitespace-nowrap px-4 py-3">{title}</th>)}</tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                     {visibleUsers.map((user) => (
                       <tr key={user.id}>
-                        <td className="px-4 py-3"><p className="max-w-48 break-words font-medium text-slate-800">{user.fullName || user.username || '—'}</p><p dir="auto" className="mt-1 max-w-48 break-words text-xs text-slate-500">{user.username}</p></td>
-                        <td className="px-4 py-3"><span dir="ltr" className="inline-block max-w-48 break-all text-slate-600">{user.email || '—'}</span></td>
-                        <td className="px-4 py-3"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-xs ${isAdmin(user) ? 'bg-primary-50 text-primary-800' : 'bg-slate-100 text-slate-600'}`}>{isAdmin(user) ? 'مدیر سیستم' : 'کاربر عادی'}</span></td>
+                        <td className="px-4 py-3"><p className="max-w-48 break-words font-medium text-slate-800">{user.fullName || user.username || '—'}</p><p dir="auto" className="mt-1 max-w-48 break-words text-xs text-slate-500 dark:text-slate-400">{user.username}</p></td>
+                        <td className="px-4 py-3"><span dir="ltr" className="inline-block max-w-48 break-all text-slate-600 dark:text-slate-400">{user.email || '—'}</span></td>
+                        <td className="px-4 py-3"><span className={`whitespace-nowrap rounded-full px-2 py-1 text-xs ${isAdmin(user) ? 'bg-primary-50 text-primary-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}>{isAdmin(user) ? 'مدیر سیستم' : 'کاربر عادی'}</span></td>
                         <td className="px-4 py-3">
                           <div className="flex gap-2">
                             <button type="button" onClick={() => handleEdit(user)} disabled={busy || user.id == null} className={buttonClass} aria-label={`ویرایش ${user.username}`}><Pencil size={14} />ویرایش</button>
@@ -193,8 +193,8 @@ export default function UsersPage() {
                   </tbody>
                 </table>
               </div>
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-3">
-                <p className="text-xs text-slate-500" role="status">{filteredUsers.length.toLocaleString('fa-IR')} کاربر · صفحه {currentPage.toLocaleString('fa-IR')} از {pageCount.toLocaleString('fa-IR')}</p>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800 px-4 py-3">
+                <p className="text-xs text-slate-500 dark:text-slate-400" role="status">{filteredUsers.length.toLocaleString('fa-IR')} کاربر · صفحه {currentPage.toLocaleString('fa-IR')} از {pageCount.toLocaleString('fa-IR')}</p>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setPage(currentPage - 1)} disabled={currentPage === 1} className={buttonClass}>قبلی</button>
                   <button type="button" onClick={() => setPage(currentPage + 1)} disabled={currentPage === pageCount} className={buttonClass}>بعدی</button>

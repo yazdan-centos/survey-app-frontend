@@ -2,7 +2,7 @@ export default function ProgressBar({ percent, label }) {
     return (
         <div className="w-full">
             {label && (
-                <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-slate-500">
+                <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
                     <span>{label}</span>
                     <span>{percent}%</span>
                 </div>

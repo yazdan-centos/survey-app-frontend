@@ -29,17 +29,17 @@ export default function ProfilePage() {
   return (
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <div className="mb-8 text-center">
-          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 sm:text-2xl">
             پیش از شروع، کمی درباره خودتان بگویید
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
             پاسخ‌های شما محرمانه بوده و صرفاً برای تحلیل کلی نتایج استفاده می‌شود.
           </p>
         </div>
 
         {role && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
-              <h3 className="mb-4 text-sm font-semibold text-slate-700">اطلاعات دموگرافی</h3>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-6">
+              <h3 className="mb-4 text-sm font-semibold text-slate-700 dark:text-slate-300">اطلاعات دموگرافی</h3>
               <DemographicForm
                   key={role.id}
                   demoKey={role.demoKey}
