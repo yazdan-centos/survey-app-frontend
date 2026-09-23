@@ -1,6 +1,9 @@
-export const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
-).replace(/\/$/, '');
+
+
+// In production: set VITE_API_BASE_URL= (empty) → Nginx proxies /api/* to Spring Boot
+// In development: set VITE_API_BASE_URL=http://localhost:8080 in .env.local
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+
 
 export const API_PATHS = {
   // Auth (not in ENDPOINTS.md but keeping for backwards compatibility)
