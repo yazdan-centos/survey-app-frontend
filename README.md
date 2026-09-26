@@ -62,8 +62,31 @@ shown when that text is unavailable. Details support answer search, filtering,
 pagination, and JSON download. This is a read-only review page: the current
 backend has no endpoint listing individual responses or deleting them.
 
-The frontend connects to `http://localhost:8080` by default. Copy `.env.example`
-to `.env.local` to override the server URL.
+`/admin/reports` provides a survey selector, summary counts, audience response
+bar chart, answer-status donut chart, and an accessible audience detail table.
+`reportService` uses the authenticated `GET /api/surveys/dashboard` response;
+survey selection filters its `surveys` collection locally. Reports show the
+available counts rather than inferred scores or trends. Refresh reloads the
+report data and preserves the selection when that survey still exists.
+
+### Development and production connections
+
+`npm run dev` loads `.env.development`. The browser sends requests to `/api`
+on the Vite server, which proxies them to `http://localhost:8080`, preserving
+the full API path. Start your backend on that address before using the app.
+This keeps browser requests on the same origin during development.
+
+To use a different development backend, copy `.env.development.local.example`
+to `.env.development.local` and change `DEV_API_TARGET` to its origin
+(for example, `http://localhost:9090`, without `/api`). Keep
+`VITE_API_BASE_URL` empty to use the proxy. Restart Vite after changing env files.
+The local override is ignored by Git and is only loaded in development mode.
+
+`npm run build` uses the existing `.env.production` settings unchanged:
+`VITE_API_BASE_URL` stays empty, and the deployed server/Nginx forwards `/api`
+to the production backend. Development proxy settings are not used in production.
+`npm run preview` serves the production build locally; it does not provide the
+production API reverse proxy. Use `npm run dev` for local backend integration.
 
 The final submission button sends a JSON request to:
 

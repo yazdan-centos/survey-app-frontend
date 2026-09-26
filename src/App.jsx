@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
 import ResponsesPage from './pages/ResponsesPage';
+import ReportsPage from './pages/ReportsPage';
 import { useAuth } from './hooks/useAuth';
 import { getPostLoginPath, isAdmin } from './utils/auth';
 
@@ -91,7 +92,7 @@ function AppShell() {
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
                             <Route path="/admin/users" element={<UsersPage />} />
                             <Route path="/admin/responses" element={<ResponsesPage />} />
-                            <Route path="/admin/reports" element={<div className="p-8"><h2 className="text-2xl font-bold">گزارش‌گیری - به زودی</h2></div>} />
+                            <Route path="/admin/reports" element={<ReportsPage />} />
                             <Route path="/admin/settings" element={<div className="p-8"><h2 className="text-2xl font-bold">تنظیمات - به زودی</h2></div>} />
                             </Route>
                         </Route>
