@@ -16,6 +16,11 @@ export const API_PATHS = {
   importQuestions: (surveyId) => `/api/questions/import?surveyId=${surveyId}`,
   questionsBySurvey: (surveyId) => `/api/questions/survey/${surveyId}`,
 
+  dimensions: '/api/dimensions',
+  dimension: (id) => `/api/dimensions/${encodeURIComponent(id)}`,
+  criteria: '/api/criteria',
+  criterion: (id) => `/api/criteria/${encodeURIComponent(id)}`,
+
   // Survey Answers
   surveyAnswers: (responseId) => `/api/survey-responses/${responseId}/answers`,
   surveyAnswer: (responseId, answerId) => `/api/survey-responses/${responseId}/answers/${answerId}`,

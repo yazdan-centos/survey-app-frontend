@@ -41,6 +41,15 @@ Activation uses `PUT` with the existing title/version and the new `active`
 value. There is no `/api/v1/admin/surveys` or dedicated activation endpoint.
 The HTTP hook continues to sign out on 401 responses.
 
+`/admin/dimensions` manages dimensions through `/api/dimensions` and
+`/api/dimensions/{id}` using `key`, `label`, and integer `displayOrder`.
+`/admin/criteria` manages criteria through `/api/criteria` and
+`/api/criteria/{id}` using `name` and the selected dimension's `dimensionId`.
+Both pages provide authenticated listing, creation, editing, confirmed deletion,
+and conflict feedback. Criteria can be filtered locally by dimension; links from
+the dimension table open that filter using `?dimensionId={id}`. The backend
+rejects deleting dimensions with criteria or criteria with questions.
+
 `/admin/users` provides user creation, editing, confirmed deletion, and local
 search, access filtering, and pagination over `GET /api/users`. Writes use
 `POST /api/users`, `PUT /api/users/{id}`, and `DELETE /api/users/{id}` through

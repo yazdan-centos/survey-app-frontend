@@ -8,6 +8,8 @@ import {
   Settings,
   FileText,
   ChevronRight,
+  Layers,
+  ListTree,
 } from 'lucide-react';
 
 const navigationItems = [
@@ -28,6 +30,18 @@ const navigationItems = [
     label: 'بانک سؤالات',
     icon: ListChecks,
     description: 'مدیریت سؤالات',
+  },
+  {
+    to: '/admin/dimensions',
+    label: 'مدیریت ابعاد',
+    icon: Layers,
+    description: 'عنوان و ترتیب نمایش ابعاد',
+  },
+  {
+    to: '/admin/criteria',
+    label: 'مدیریت معیارها',
+    icon: ListTree,
+    description: 'معیارهای هر بُعد',
   },
   {
     to: '/admin/users',

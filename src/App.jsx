@@ -11,6 +11,8 @@ import ThankYouPage from './pages/ThankYouPage';
 import { DIMENSIONS } from './data/dimensions';
 import AdminQuestionsPage from './pages/AdminQuestionsPage';
 import AdminSurveysPage from './pages/AdminSurveysPage';
+import AdminDimensionsPage from './pages/AdminDimensionsPage';
+import AdminCriteriaPage from './pages/AdminCriteriaPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
@@ -90,6 +92,8 @@ function AppShell() {
                             <Route path="/dashboard" element={<DashboardPage />} />
                             <Route path="/admin/questions" element={<AdminQuestionsPage />} />
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
+                            <Route path="/admin/dimensions" element={<AdminDimensionsPage />} />
+                            <Route path="/admin/criteria" element={<AdminCriteriaPage />} />
                             <Route path="/admin/users" element={<UsersPage />} />
                             <Route path="/admin/responses" element={<ResponsesPage />} />
                             <Route path="/admin/reports" element={<ReportsPage />} />
