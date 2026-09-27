@@ -46,7 +46,7 @@ export function groupSurveyQuestions(questions, roleId) {
 export async function getActiveQuestionnaire(request, { signal } = {}) {
   let survey;
   try {
-    survey = await request(API_PATHS.activeSurvey, { signal });
+    survey = await request(API_PATHS.activeSurvey, { signal, preserveSessionOnUnauthorized: true });
   } catch (error) {
     if (error.status === 404) return { survey: null, questions: [] };
     throw error;

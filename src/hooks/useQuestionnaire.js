@@ -22,7 +22,9 @@ export function useQuestionnaire() {
     getActiveQuestionnaire(request, { signal: controller.signal })
       .then((data) => { if (!controller.signal.aborted) setResult({ request, revision, ...data }); })
       .catch((error) => {
-        if (!controller.signal.aborted) setResult({ request, revision, error: error.message || 'دریافت سؤال‌ها ناموفق بود.' });
+        if (!controller.signal.aborted) setResult({ request, revision, error: error.status === 401
+          ? 'سرور دسترسی به پیمایش فعال را رد کرد. لطفاً به مدیر سامانه اطلاع دهید.'
+          : error.message || 'دریافت سؤال‌ها ناموفق بود.' });
       });
     return () => controller.abort();
   }, [request, revision, enabled]);

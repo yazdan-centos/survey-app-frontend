@@ -57,3 +57,15 @@ test('Excel round trip groups levels by code and role and attaches selected surv
 test('creation propagates server failures', async () => {
   await assert.rejects(service.createQuestion(async () => { throw new Error('Server rejected request'); }, question), /Server rejected/);
 });
+
+test('lists questions for the selected survey and reports invalid responses', async () => {
+  const signal = new AbortController().signal;
+  const rows = [{ id: 'saved', code: 'Q1', role: 'MANAGERS', levels: [] }];
+  assert.deepEqual(await service.listQuestionsBySurvey(async (path, options) => {
+    assert.equal(path, `/api/questions/survey/${surveyId}`);
+    assert.equal(options.method, 'GET');
+    assert.equal(options.signal, signal);
+    return rows;
+  }, surveyId, { signal }), rows);
+  await assert.rejects(service.listQuestionsBySurvey(async () => ({}), surveyId), /ساختار فهرست/);
+});

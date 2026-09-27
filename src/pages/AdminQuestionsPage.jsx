@@ -4,6 +4,7 @@ import {useHttp} from '../hooks/useHttp';
 import {listSurveys} from '../services/adminSurveyService';
 import {
   createQuestion,
+  listQuestionsBySurvey,
   parseQuestionRows,
   QUESTION_IMPORT_HEADERS,
   QUESTION_ROLES
@@ -43,6 +44,11 @@ export default function AdminQuestionsPage() {
   const [pendingImport, setPendingImport] = useState([]);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
+  const [questionsError, setQuestionsError] = useState('');
+  const [questionsRevision, setQuestionsRevision] = useState(0);
+  const [roleFilter, setRoleFilter] = useState('');
 
   useEffect(() => {
     const controller = new AbortController();
@@ -52,6 +58,25 @@ export default function AdminQuestionsPage() {
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [request, reload]);
+
+  useEffect(() => {
+    if (!surveyId) return;
+    const controller = new AbortController();
+    listQuestionsBySurvey(request, surveyId, { signal: controller.signal })
+      .then((data) => { if (!controller.signal.aborted) setQuestions(data); })
+      .catch((error) => { if (!controller.signal.aborted) setQuestionsError(error.message); })
+      .finally(() => { if (!controller.signal.aborted) setQuestionsLoading(false); });
+    return () => controller.abort();
+  }, [request, surveyId, questionsRevision]);
+
+  const refreshQuestions = () => {
+    setQuestionsLoading(true);
+    setQuestionsError('');
+    setQuestionsRevision((revision) => revision + 1);
+  };
+  const visibleQuestions = questions.filter((item) => !roleFilter || item.role === roleFilter)
+    .sort((first, second) => (first.dimension?.displayOrder ?? 0) - (second.dimension?.displayOrder ?? 0)
+      || first.displayOrder - second.displayOrder || first.code.localeCompare(second.code, undefined, { numeric: true }));
 
   const update = (key, value) => setQuestion((current) => ({ ...current, [key]: value }));
   const updateLevel = (index, key, value) => setQuestion((current) => ({ ...current,
@@ -65,6 +90,7 @@ export default function AdminQuestionsPage() {
     setNotice(null);
     try {
       await createQuestion(request, { ...question, surveyId });
+      refreshQuestions();
       setQuestion(emptyQuestion);
       setNotice({ text: 'سؤال با موفقیت ذخیره شد.' });
     } catch (error) {
@@ -108,16 +134,21 @@ export default function AdminQuestionsPage() {
       setNotice({ error: true, text: `${saved} سؤال ذخیره شد؛ ذخیره سؤال «${pendingImport[saved].code}» ناموفق بود: ${error.message}` });
     } finally {
       setPendingImport((current) => current.slice(saved));
+      if (saved) refreshQuestions();
       setBusy(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">مدیریت سؤال‌ها</h2>
       <label className="mt-5 block text-sm font-semibold" htmlFor="question-survey">پیمایش</label>
       <select id="question-survey" name="surveyId" className={`${inputClass} mt-2`} value={surveyId} disabled={loading || busy} required onChange={(event) => {
         setSurveyId(event.target.value);
+        setQuestions([]);
+        setQuestionsError('');
+        setQuestionsLoading(Boolean(event.target.value));
+        setRoleFilter('');
         setPendingImport([]);
         setNotice(null);
       }}>
@@ -127,8 +158,38 @@ export default function AdminQuestionsPage() {
       {loadError && <div className="mt-2 text-sm text-red-600" role="alert">{loadError} <button type="button" onClick={() => { setLoading(true); setLoadError(''); setReload((value) => value + 1); }}>تلاش مجدد</button></div>}
       {!loading && !loadError && !surveys.length && <p className="mt-2 text-sm">ابتدا یک پیمایش در بخش مدیریت پیمایش‌ها ایجاد کنید.</p>}
       {notice && <p role={notice.error ? 'alert' : 'status'} className={`mt-4 text-sm ${notice.error ? 'text-red-600' : 'text-green-700 dark:text-green-400'}`}>{notice.text}</p>}
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+            <label className="block text-sm">فیلتر نقش
+              <select value={roleFilter} disabled={!surveyId} onChange={(event) => setRoleFilter(event.target.value)} className={`${inputClass} mt-1`}>
+                <option value="">همه نقش‌ها</option>
+                {QUESTION_ROLES.map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
+              </select>
+            </label>
+            <button type="button" onClick={refreshQuestions} disabled={!surveyId || questionsLoading || busy} className="rounded-lg border border-slate-200 px-3 py-2 text-sm disabled:opacity-50 dark:border-slate-700">به‌روزرسانی فهرست</button>
+          </div>
+          {!surveyId ? <p className="rounded-2xl border border-slate-200 p-8 text-center text-sm dark:border-slate-700">برای مشاهده سؤال‌ها یک پیمایش انتخاب کنید.</p>
+            : questionsError ? <div role="alert" className="rounded-lg bg-rose-50 p-4 text-sm text-rose-800">{questionsError}<button type="button" onClick={refreshQuestions} className="mr-3 underline">تلاش مجدد</button></div>
+            : questionsLoading ? <p role="status" className="p-8 text-center">در حال دریافت سؤال‌ها…</p>
+            : !visibleQuestions.length ? <p className="rounded-2xl border border-slate-200 p-8 text-center text-sm dark:border-slate-700">سؤالی برای نمایش وجود ندارد.</p>
+            : <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+              <table className="w-full text-right text-sm">
+                <thead className="bg-slate-50 dark:bg-slate-800"><tr>{['کد', 'سؤال', 'نقش', 'بُعد / معیار', 'ترتیب', 'سطوح پاسخ'].map((heading) => <th key={heading} scope="col" className="px-4 py-3">{heading}</th>)}</tr></thead>
+                <tbody>{visibleQuestions.map((item) => <tr key={item.id} className="border-t border-slate-100 align-top dark:border-slate-800">
+                  <td className="px-4 py-3" dir="ltr">{item.code}</td>
+                  <td className="max-w-sm whitespace-pre-wrap break-words px-4 py-3">{item.text}</td>
+                  <td className="whitespace-nowrap px-4 py-3">{QUESTION_ROLES.find((role) => role.value === item.role)?.label || item.role}</td>
+                  <td className="px-4 py-3">{item.dimension?.label || '—'}{item.criterionName && <span className="block text-xs text-slate-500 dark:text-slate-400">{item.criterionName}</span>}</td>
+                  <td className="px-4 py-3">{item.displayOrder}</td>
+                  <td className="max-w-xs break-words px-4 py-3 text-xs text-slate-500 dark:text-slate-400">{item.levels?.length ? item.levels.map((level) => `${level.levelNumber}: ${level.description}`).join('، ') : '—'}</td>
+                </tr>)}</tbody>
+              </table>
+            </div>}
+        </div>
+        <div className="space-y-6">
         <form onSubmit={addQuestion} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
+          <h3 className="mb-4 font-bold text-slate-900 dark:text-slate-100">سؤال جدید</h3>
           <fieldset disabled={busy || !surveyId} className="space-y-4">
             <label className="block text-sm">کد سؤال<input name="code" value={question.code} onChange={(event) => update('code', event.target.value)} className={inputClass} required /></label>
             <label className="block text-sm">متن سؤال<textarea name="text" value={question.text} onChange={(event) => update('text', event.target.value)} rows={3} className={inputClass} required /></label>
@@ -159,6 +220,7 @@ export default function AdminQuestionsPage() {
             <button type="button" disabled={busy} onClick={saveImport} className={`${buttonClass} mt-3`}>ذخیره سؤال‌های فایل</button>
             <pre className="mt-4 max-h-80 overflow-auto rounded-lg bg-slate-50 dark:bg-slate-800 p-3 text-left text-xs" dir="ltr">{JSON.stringify(pendingImport, null, 2)}</pre>
           </>}
+        </div>
         </div>
       </div>
     </div>

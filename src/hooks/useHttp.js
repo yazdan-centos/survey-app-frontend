@@ -12,7 +12,7 @@ export function useHttp() {
         token: options.token ?? accessToken,
       });
     } catch (error) {
-      if (error.status === 401 && accessToken) signOut();
+      if (error.status === 401 && accessToken && !options.preserveSessionOnUnauthorized) signOut();
       throw error;
     }
   }, [accessToken, signOut]);

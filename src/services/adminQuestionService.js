@@ -52,3 +52,9 @@ export function parseQuestionRows(rows, surveyId) {
 export function createQuestion(request, question) {
   return request(API_PATHS.questions, { method: 'POST', body: questionPayload(question) });
 }
+
+export async function listQuestionsBySurvey(request, surveyId, { signal } = {}) {
+  const data = await request(API_PATHS.questionsBySurvey(encodeURIComponent(surveyId)), { method: 'GET', signal });
+  if (!Array.isArray(data)) throw new Error('ساختار فهرست سؤال‌های پیمایش معتبر نیست.');
+  return data;
+}
