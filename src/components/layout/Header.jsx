@@ -1,13 +1,23 @@
-import { Factory, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import ThemeToggle from './ThemeToggle';
+import logo from '../../assets/logo.png';
 
 export default function Header() {
   const { isAuthenticated, signOut } = useAuth();
 
   return (
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4 sm:px-6">
+        <div className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
+          <img src={logo} alt="لوگوی گروه مپنا" className="h-12 w-12 shrink-0 rounded-md bg-white object-contain" />
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-base font-bold text-slate-900 dark:text-slate-100 sm:text-lg">
+              پیمایش ارزیابی شرکت در کلاس جهانی
+            </h1>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
+              معاونت سیستم‌ها و برنامه‌ریزی راهبردی
+            </p>
+          </div>
           <ThemeToggle className="order-last sm:order-none" />
           {isAuthenticated && (
             <button
@@ -20,17 +30,6 @@ export default function Header() {
               <span>خروج</span>
             </button>
           )}
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-800 text-white">
-          <Factory size={20} strokeWidth={1.75} />
-        </span>
-          <div className="min-w-0 flex-1">
-            <h1 className="truncate text-base font-bold text-slate-900 dark:text-slate-100 sm:text-lg">
-              پیمایش ارزیابی شرکت در کلاس جهانی
-            </h1>
-            <p className="truncate text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
-              معاونت سیستم‌ها و برنامه‌ریزی راهبردی
-            </p>
-          </div>
         </div>
       </header>
   );

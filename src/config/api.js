@@ -15,6 +15,10 @@ export const API_PATHS = {
   exportQuestions: (surveyId) => `/api/questions/export?surveyId=${surveyId}`,
   importQuestions: (surveyId) => `/api/questions/import?surveyId=${surveyId}`,
   questionsBySurvey: (surveyId) => `/api/questions/survey/${surveyId}`,
+  demographicQuestions: '/api/demographic-questions',
+  demographicQuestion: (id) => `/api/demographic-questions/${encodeURIComponent(id)}`,
+  demographicQuestionImport: '/api/demographic-questions/import',
+  demographicQuestionTemplate: '/api/demographic-questions/template',
 
   dimensions: '/api/dimensions',
   dimension: (id) => `/api/dimensions/${encodeURIComponent(id)}`,

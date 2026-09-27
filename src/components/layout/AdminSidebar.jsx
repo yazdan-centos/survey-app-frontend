@@ -32,6 +32,12 @@ const navigationItems = [
     description: 'مدیریت سؤالات',
   },
   {
+    to: '/admin/demographic-questions',
+    label: 'سؤالات دموگرافی',
+    icon: ClipboardList,
+    description: 'مدیریت پرسش‌های پروفایل',
+  },
+  {
     to: '/admin/dimensions',
     label: 'مدیریت ابعاد',
     icon: Layers,

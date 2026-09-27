@@ -12,6 +12,7 @@ import AdminQuestionsPage from './pages/AdminQuestionsPage';
 import AdminSurveysPage from './pages/AdminSurveysPage';
 import AdminDimensionsPage from './pages/AdminDimensionsPage';
 import AdminCriteriaPage from './pages/AdminCriteriaPage';
+import DemographicQuestionsPage from './pages/DemographicQuestionsPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
@@ -80,6 +81,7 @@ function AppShell() {
                             <Route element={<AdminLayout />}>
                             <Route path="/dashboard" element={<DashboardPage />} />
                             <Route path="/admin/questions" element={<AdminQuestionsPage />} />
+                            <Route path="/admin/demographic-questions" element={<DemographicQuestionsPage />} />
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
                             <Route path="/admin/dimensions" element={<AdminDimensionsPage />} />
                             <Route path="/admin/criteria" element={<AdminCriteriaPage />} />
