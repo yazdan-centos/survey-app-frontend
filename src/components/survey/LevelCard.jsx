@@ -1,5 +1,3 @@
-const LEVEL_TAGS = ['سطح ۱', 'سطح ۲', 'سطح ۳', 'سطح ۴'];
-
 export default function LevelCard({ levelIndex, text, selected, onSelect, accentColor }) {
   return (
     <button
@@ -20,7 +18,7 @@ export default function LevelCard({ levelIndex, text, selected, onSelect, accent
         ].join(' ')}
         style={selected ? undefined : { backgroundColor: accentColor }}
       >
-        {LEVEL_TAGS[levelIndex - 1]}
+        سطح {levelIndex.toLocaleString('fa-IR')}
       </span>
       <p className="whitespace-pre-line leading-relaxed">{text}</p>
     </button>

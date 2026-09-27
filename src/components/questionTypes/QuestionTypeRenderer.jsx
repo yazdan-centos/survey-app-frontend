@@ -30,8 +30,8 @@ export default function QuestionTypeRenderer({ type, question, value, onChange, 
   if (type === 'maturityLevels') {
     return (
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {(question.levels || []).map((text, index) => (
-          <LevelCard key={index} levelIndex={index + 1} text={text} selected={value === index + 1} onSelect={() => onChange(index + 1)} accentColor={accentColor} />
+        {(question.levels || []).map((level) => (
+          <LevelCard key={level.levelNumber} levelIndex={level.levelNumber} text={level.description} selected={value === level.levelNumber} onSelect={() => onChange(level.levelNumber)} accentColor={accentColor} />
         ))}
       </div>
     );

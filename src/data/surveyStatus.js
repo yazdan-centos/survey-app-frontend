@@ -1,5 +1,5 @@
 // Status metadata for admin-managed surveys (campaigns), independent from
-// the respondent-facing question data in surveyQuestions.js.
+// the respondent-facing questions loaded from the backend.
 export const SURVEY_STATUS = {
   draft: { label: 'پیش‌نویس', badgeClass: 'bg-slate-100 text-slate-600 ring-slate-200' },
   active: { label: 'فعال', badgeClass: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },

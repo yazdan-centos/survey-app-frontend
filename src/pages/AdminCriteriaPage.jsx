@@ -71,7 +71,7 @@ export default function AdminCriteriaPage() {
                 <tbody>{visibleCriteria.map((criterion) => <tr key={criterion.id} className="border-t border-slate-100 dark:border-slate-800">
                   <td className="px-4 py-3">{criterion.name}</td>
                   <td className="px-4 py-3">{dimensionNames.get(criterion.dimensionId) || criterion.dimensionId}</td>
-                  <td className="px-4 py-3"><div className="flex flex-wrap gap-2">
+                  <td className="px-4 py-3"><div className="flex w-max flex-nowrap items-center gap-2 whitespace-nowrap">
                     <button type="button" disabled={disabled} className={buttonClass} aria-label={`ویرایش ${criterion.name}`} onClick={() => { setEditingId(criterion.id); setForm({ name: criterion.name, dimensionId: criterion.dimensionId }); }}>ویرایش</button>
                     <button type="button" disabled={disabled} className={`${buttonClass} text-rose-600 dark:text-rose-400`} aria-label={`حذف ${criterion.name}`} onClick={() => remove(criterion)}>حذف</button>
                   </div></td>

@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { CheckCircle2, Loader2, RotateCcw } from 'lucide-react';
 import { useSurvey } from '../context/SurveyContext';
 import { useHttp } from '../hooks/useHttp';
-import { useAuth } from '../hooks/useAuth';
 import { submitSurveyResponse } from '../services/surveyService';
+import QuestionnaireStatus from '../components/survey/QuestionnaireStatus';
 import RadarScoreChart from '../components/results/RadarScoreChart';
 import DimensionBarChart from '../components/results/DimensionBarChart';
 import LevelDistribution from '../components/results/LevelDistribution';
@@ -11,39 +11,29 @@ import ExportButtons from '../components/results/ExportButtons';
 import { scoreToLevelLabel, scoreToPercent } from '../utils/scoring';
 
 export default function ResultsPage() {
-  const { role, state, dimensionScores, overallAverage, levelDistribution, resetSurvey, finishSurvey } = useSurvey();
-  const { user } = useAuth();
+  return <QuestionnaireStatus><SurveyResults /></QuestionnaireStatus>;
+}
+
+function SurveyResults() {
+  const { role, state, flatQuestions, isSurveyComplete, dimensionScores, overallAverage, levelDistribution, resetSurvey, finishSurvey } = useSurvey();
   const request = useHttp();
   const dashboardRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState('');
 
   const handleFinish = async () => {
+    if (!isSurveyComplete || isSubmitting) return;
     setIsSubmitting(true);
     setSubmissionError('');
 
     const payload = {
-      surveyVersion: 1,
-      submittedAt: state.submittedAt ?? new Date().toISOString(),
-      respondent: {
-        userId: user?.id ?? null,
-        roleId: role?.id ?? state.roleId,
-        roleLabel: role?.label ?? null,
-        demographics: state.demographics,
-      },
-      answers: state.answers,
-      results: {
-        overallAverage,
-        dimensions: dimensionScores.map((dimension) => ({
-          key: dimension.key,
-          label: dimension.label,
-          average: dimension.average,
-          answered: dimension.answered,
-          total: dimension.total,
-          skipped: dimension.skipped,
-        })),
-        levelDistribution,
-      },
+      role: role.id.toUpperCase(),
+      demographics: Object.entries(state.demographics).map(([fieldKey, value]) => ({ fieldKey, value: String(value) })),
+      answers: flatQuestions.map((question) => ({
+        questionId: question.id,
+        selectedLevel: state.answers[question.id] === 'skip' ? null : state.answers[question.id],
+        skipped: state.answers[question.id] === 'skip',
+      })),
     };
 
     try {
@@ -93,7 +83,7 @@ export default function ResultsPage() {
           {/* Charts */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">نمودار راداری ابعاد پنج‌گانه</h3>
+              <h3 className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">نمودار راداری ابعاد پیمایش</h3>
               <RadarScoreChart dimensionScores={dimensionScores} />
             </div>
             <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
@@ -137,7 +127,7 @@ export default function ResultsPage() {
           <button
               type="button"
               onClick={handleFinish}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isSurveyComplete}
               className="inline-flex items-center gap-2 rounded-lg bg-primary-800 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}

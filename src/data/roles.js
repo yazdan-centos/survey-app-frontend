@@ -1,5 +1,4 @@
 // Respondent role/profile definitions.
-// Each role maps to a question bank (surveyQuestions.json) and a demographic form (demographics.json).
 export const ROLES = [
   {
     id: 'managers',
@@ -13,14 +12,14 @@ export const ROLES = [
     label: 'اعضای هیأت مدیره',
     description: 'اعضای هیأت مدیره و نهادهای بالادستی',
     demoKey: 'board',
-    allowSkip: true,
+    allowSkip: false,
   },
   {
     id: 'customers',
     label: 'مشتریان کلیدی',
     description: 'مشتریان و ذی‌نفعان کلیدی شرکت',
     demoKey: 'stakeholders',
-    allowSkip: true,
+    allowSkip: false,
   },
   {
     id: 'suppliers',
@@ -32,3 +31,9 @@ export const ROLES = [
 ];
 
 export const getRoleById = (id) => ROLES.find((r) => r.id === id);
+
+export function getRespondentRoleId(user) {
+  if (user?.isAdmin === false) return 'managers';
+  const roleId = String(user?.role ?? '').toLowerCase();
+  return getRoleById(roleId)?.id ?? null;
+}

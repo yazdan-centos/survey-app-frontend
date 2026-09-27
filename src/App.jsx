@@ -8,7 +8,6 @@ import ProfilePage from './pages/ProfilePage';
 import SurveyPage from './pages/SurveyPage';
 import ResultsPage from './pages/ResultsPage';
 import ThankYouPage from './pages/ThankYouPage';
-import { DIMENSIONS } from './data/dimensions';
 import AdminQuestionsPage from './pages/AdminQuestionsPage';
 import AdminSurveysPage from './pages/AdminSurveysPage';
 import AdminDimensionsPage from './pages/AdminDimensionsPage';
@@ -60,17 +59,7 @@ function AppShell() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<AuthGuard />}>
                         <Route path="/" element={<HomePage />} />
-                        {DIMENSIONS.map((dim) => (
-                            <Route
-                                key={dim.key}
-                                path={`/survey/${dim.key}`}
-                                element={
-                                    <StepGuard requireRole>
-                                        <SurveyPage dimensionKey={dim.key} />
-                                    </StepGuard>
-                                }
-                            />
-                        ))}
+                        <Route path="/survey/:dimensionKey" element={<StepGuard requireRole><SurveyPage /></StepGuard>} />
                         <Route
                             path="/results"
                             element={

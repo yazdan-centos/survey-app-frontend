@@ -1,32 +1,30 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import DemographicForm from '../components/demographics/DemographicForm';
 import { useSurvey } from '../context/SurveyContext';
-import { ROLES, getRoleById } from '../data/roles';
-import { DIMENSIONS } from '../data/dimensions';
+import { getRoleById } from '../data/roles';
+import QuestionnaireStatus from '../components/survey/QuestionnaireStatus';
 
 export default function ProfilePage() {
-  const { state, setRole, setDemographics, goToStep } = useSurvey();
-  const hasAssignedRole = useRef(false);
+  const { state, setRole, setDemographics, goToStep, availableRoleIds, dimensionsWithQuestions, questionsLoading } = useSurvey();
 
-  // TODO(auth): role selection is temporarily disabled — once LDAP
-  // authentication is wired in, replace this with the role resolved from
-  // the logged-in user instead of picking one at random.
+  // Legacy accounts without a recognized role retain the fallback selection.
+  // SurveyContext resolves authenticated roles before this effect runs.
   useEffect(() => {
-    if (!state.roleId && !hasAssignedRole.current) {
-      hasAssignedRole.current = true;
-      const randomRole = ROLES[Math.floor(Math.random() * ROLES.length)];
-      setRole(randomRole.id);
+    if (!state.roleId && !questionsLoading && availableRoleIds.length) {
+      setRole(availableRoleIds[Math.floor(Math.random() * availableRoleIds.length)]);
     }
-  }, [state.roleId, setRole]);
+  }, [state.roleId, setRole, availableRoleIds, questionsLoading]);
 
   const handleValid = (values) => {
+    if (!dimensionsWithQuestions.length) return;
     setDemographics(values);
-    goToStep(DIMENSIONS[0].key);
+    goToStep(dimensionsWithQuestions[0].key);
   };
 
   const role = state.roleId ? getRoleById(state.roleId) : null;
 
   return (
+    <QuestionnaireStatus requireRoleQuestions={Boolean(role)}>
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <div className="mb-8 text-center">
           <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 sm:text-2xl">
@@ -49,5 +47,6 @@ export default function ProfilePage() {
             </div>
         )}
       </div>
+    </QuestionnaireStatus>
   );
 }

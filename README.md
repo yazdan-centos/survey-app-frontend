@@ -1,9 +1,9 @@
 # پیمایش ارزیابی شرکت در کلاس جهانی (World-Class Assessment Survey)
 
 An enterprise multi-step assessment wizard built with React + Vite + Tailwind CSS.
-Survey content (5 dimensions × 25 criteria × 4 performance levels, across 4 respondent
-roles) is extracted directly from the source workbook `پیمایش_کلاس_جهانی.xlsx` into
-`src/data/surveyQuestions.json` and `src/data/demographics.json`.
+Respondent questions come from the active survey on the backend. Question text,
+answer levels, and dimension labels/order are loaded at runtime; there is no local
+question-bank fallback. Demographic forms remain in `src/data/demographics.json`.
 
 ## Stack
 - React 19 + Vite
@@ -24,6 +24,15 @@ npm run preview   # serve the production build locally
 ```
 
 ## Backend API
+
+The respondent wizard loads `GET /api/v1/surveys/active`, then
+`GET /api/questions/survey/{surveyId}` with the signed-in user's bearer token.
+It consumes the backend's `QuestionResponseDto`, filters questions by audience,
+and builds dimension routes from the response. Loading, failure, no active survey,
+and empty questionnaire states block the wizard and offer retry where applicable.
+Answers use backend question IDs and actual `levelNumber` values. Progress is
+scoped by respondent and survey in `wcs:survey-state:v2`; legacy local-question
+progress is not reused. Deploy the updated backend DTO endpoint with this frontend.
 
 Login uses `POST /api/auth/login` and stores its `{ accessToken, user }` response.
 The backend's boolean `user.isAdmin` determines admin navigation; when absent,
@@ -121,7 +130,7 @@ src/
     survey/          QuestionCard, LevelCard
     results/         RadarScoreChart, DimensionBarChart, LevelDistribution, ExportButtons
   context/           SurveyContext.jsx  (global state, scoring, localStorage persistence)
-  data/              roles.js, dimensions.js, surveyQuestions.js/.json, demographics.js/.json
+  data/              roles.js, dimensions.js (dashboard styling), demographics.js/.json
   hooks/             useLocalStorage.js
   pages/             ProfilePage, SurveyPage, ResultsPage
   utils/             scoring.js, exportResults.js

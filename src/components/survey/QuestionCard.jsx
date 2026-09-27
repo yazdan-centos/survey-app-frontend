@@ -17,7 +17,7 @@ export default function QuestionCard({
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 sm:text-lg">
-            {question.criterion} در سازمان شما در چه سطحی است؟
+            {question.text}
           </h3>
         </div>
       </div>

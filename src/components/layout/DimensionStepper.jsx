@@ -1,14 +1,13 @@
 import { Check } from 'lucide-react';
-import { DIMENSIONS } from '../../data/dimensions';
 import { useSurvey } from '../../context/SurveyContext';
 
 export default function DimensionStepper({ activeKey }) {
-  const { isDimensionComplete, goToStep } = useSurvey();
-  const activeIndex = DIMENSIONS.findIndex((d) => d.key === activeKey);
+  const { isDimensionComplete, goToStep, dimensionsWithQuestions } = useSurvey();
+  const activeIndex = dimensionsWithQuestions.findIndex((dimension) => dimension.key === activeKey);
 
   return (
       <ol className="flex items-center gap-1.5 sm:gap-2">
-        {DIMENSIONS.map((dim, idx) => {
+        {dimensionsWithQuestions.map((dim, idx) => {
           const complete = isDimensionComplete(dim.key);
           const isActive = dim.key === activeKey;
           const isPast = idx < activeIndex;
@@ -35,7 +34,7 @@ export default function DimensionStepper({ activeKey }) {
                 >
                   {complete && !isActive ? <Check size={16} /> : idx + 1}
                 </button>
-                {idx < DIMENSIONS.length - 1 && (
+                {idx < dimensionsWithQuestions.length - 1 && (
                     <span
                         className={[
                           'h-0.5 flex-1 rounded-full',
