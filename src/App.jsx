@@ -20,6 +20,7 @@ import ResponsesPage from './pages/ResponsesPage';
 import ReportsPage from './pages/ReportsPage';
 import { useAuth } from './hooks/useAuth';
 import { getPostLoginPath, isAdmin } from './utils/auth';
+import QuestionDataTable from "./components/QuestionDataTable/QuestionDataTable.jsx";
 
 function AuthGuard() {
     const { isAuthenticated } = useAuth();
