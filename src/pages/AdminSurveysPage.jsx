@@ -5,6 +5,7 @@ import * as adminSurveyService from '../services/adminSurveyService';
 import { SURVEY_STATUS_FILTER_OPTIONS } from '../data/surveyStatus';
 import SurveyForm from '../components/admin/SurveyForm';
 import SurveyTable from '../components/admin/SurveyTable';
+import AssignSurveyPanel from '../components/admin/AssignSurveyPanel';
 
 export default function AdminSurveysPage() {
   const request = useHttp();
@@ -16,6 +17,7 @@ export default function AdminSurveysPage() {
   const [submitting, setSubmitting] = useState(false);
   const [pendingId, setPendingId] = useState(null);
   const [editingSurvey, setEditingSurvey] = useState(null);
+  const [assigningSurvey, setAssigningSurvey] = useState(null);
   const [notice, setNotice] = useState(null); // { type: 'success' | 'error', text }
 
   const loadSurveys = useCallback(async () => {
@@ -71,7 +73,7 @@ export default function AdminSurveysPage() {
     try {
       const updated = await adminSurveyService.setSurveyActive(request, survey, nextActive);
       setSurveys((current) =>
-        current.map((s) => (s.id === survey.id ? { ...s, ...updated, status: updated?.status ?? (nextActive ? 'active' : 'inactive') } : s))
+          current.map((s) => (s.id === survey.id ? { ...s, ...updated, status: updated?.status ?? (nextActive ? 'active' : 'inactive') } : s))
       );
       setNotice({
         type: 'success',
@@ -91,6 +93,7 @@ export default function AdminSurveysPage() {
       await adminSurveyService.deleteSurvey(request, survey.id);
       setSurveys((current) => current.filter((s) => s.id !== survey.id));
       if (editingSurvey?.id === survey.id) setEditingSurvey(null);
+      if (assigningSurvey?.id === survey.id) setAssigningSurvey(null);
       setNotice({ type: 'success', text: 'پیمایش حذف شد.' });
     } catch (error) {
       setNotice({ type: 'error', text: error.message || 'حذف پیمایش با خطا مواجه شد.' });
@@ -100,84 +103,94 @@ export default function AdminSurveysPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">مدیریت پیمایش‌ها</h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            پیمایش جدید بسازید، عنوان و نسخه آن را ویرایش کنید و هر زمان لازم بود فعال یا غیرفعالش کنید.
-          </p>
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">مدیریت پیمایش‌ها</h2>
+            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              پیمایش جدید بسازید، عنوان و نسخه آن را ویرایش کنید و هر زمان لازم بود فعال یا غیرفعالش کنید.
+            </p>
+          </div>
+          <button
+              type="button"
+              onClick={loadSurveys}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-60"
+          >
+            {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCcw size={14} />}
+            به‌روزرسانی فهرست
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={loadSurveys}
-          disabled={loading}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-60"
-        >
-          {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCcw size={14} />}
-          به‌روزرسانی فهرست
-        </button>
-      </div>
 
-      {notice && (
-        <div
-          className={`mt-4 rounded-lg px-4 py-2.5 text-sm ${
-            notice.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
-          }`}
-        >
-          {notice.text}
-        </div>
-      )}
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0">
-          <div className="mb-3 flex items-center gap-2">
-            <label className="text-xs font-medium text-slate-600 dark:text-slate-400">فیلتر وضعیت:</label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 text-xs focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+        {notice && (
+            <div
+                className={`mt-4 rounded-lg px-4 py-2.5 text-sm ${
+                    notice.type === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+                }`}
             >
-              {SURVEY_STATUS_FILTER_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              {notice.text}
+            </div>
+        )}
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="min-w-0">
+            <div className="mb-3 flex items-center gap-2">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400">فیلتر وضعیت:</label>
+              <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 text-xs focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+              >
+                {SURVEY_STATUS_FILTER_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                ))}
+              </select>
+            </div>
+
+            {loadError ? (
+                <div className="flex items-start gap-2 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                  <AlertTriangle size={18} className="mt-0.5 shrink-0" />
+                  <div>
+                    <p>{loadError}</p>
+                    <button type="button" onClick={loadSurveys} className="mt-2 font-semibold underline">
+                      تلاش مجدد
+                    </button>
+                  </div>
+                </div>
+            ) : loading ? (
+                <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-sm text-slate-500 dark:text-slate-400">
+                  <Loader2 size={16} className="animate-spin" /> در حال بارگذاری پیمایش‌ها...
+                </div>
+            ) : (
+                <SurveyTable
+                    surveys={visibleSurveys}
+                    pendingId={pendingId}
+                    onEdit={setEditingSurvey}
+                    onToggleActive={handleToggleActive}
+                    onDelete={handleDelete}
+                    onAssign={setAssigningSurvey}
+                />
+            )}
           </div>
 
-          {loadError ? (
-            <div className="flex items-start gap-2 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
-              <AlertTriangle size={18} className="mt-0.5 shrink-0" />
-              <div>
-                <p>{loadError}</p>
-                <button type="button" onClick={loadSurveys} className="mt-2 font-semibold underline">
-                  تلاش مجدد
-                </button>
-              </div>
-            </div>
-          ) : loading ? (
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-sm text-slate-500 dark:text-slate-400">
-              <Loader2 size={16} className="animate-spin" /> در حال بارگذاری پیمایش‌ها...
-            </div>
-          ) : (
-            <SurveyTable
-              surveys={visibleSurveys}
-              pendingId={pendingId}
-              onEdit={setEditingSurvey}
-              onToggleActive={handleToggleActive}
-              onDelete={handleDelete}
+          <div className="min-w-0 space-y-6">
+            <SurveyForm
+                editingSurvey={editingSurvey}
+                onSubmit={handleCreateOrUpdate}
+                onCancelEdit={() => setEditingSurvey(null)}
+                submitting={submitting}
             />
-          )}
+            {assigningSurvey && (
+                <AssignSurveyPanel
+                    key={assigningSurvey.id}
+                    survey={assigningSurvey}
+                    onClose={() => setAssigningSurvey(null)}
+                />
+            )}
+          </div>
         </div>
-
-        <SurveyForm
-          editingSurvey={editingSurvey}
-          onSubmit={handleCreateOrUpdate}
-          onCancelEdit={() => setEditingSurvey(null)}
-          submitting={submitting}
-        />
       </div>
-    </div>
   );
 }

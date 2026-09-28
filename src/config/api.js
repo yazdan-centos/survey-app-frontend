@@ -38,10 +38,19 @@ export const API_PATHS = {
   surveys: '/api/v1/surveys',  // Public surveys endpoint (from ENDPOINTS.md)
   activeSurvey: '/api/v1/surveys/active',  // Get active survey (from ENDPOINTS.md)
   survey: (surveyId) => `/api/v1/surveys/${surveyId}`,  // Survey by ID (from ENDPOINTS.md)
-  
+
   // SurveyController serves both survey listing and management on these paths.
   adminSurveys: '/api/v1/surveys',
   adminSurvey: (id) => `/api/v1/surveys/${id}`,
+
+  // Authenticated user's assigned surveys, history and result access check
+  activeSurveys: '/api/users/me/active-surveys',
+  participatedSurveys: '/api/users/me/participated-surveys',
+  surveyResultsAccess: (surveyId) => `/api/users/me/surveys/${surveyId}/results`,
+
+  // Survey assignments (admin)
+  surveyAssignments: '/api/survey-assignments',
+  surveyAssignment: (assignmentId) => `/api/survey-assignments/${assignmentId}`,
 
   // Users
   users: '/api/users',

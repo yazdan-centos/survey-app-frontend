@@ -15,7 +15,7 @@ export default function ResultsPage() {
 }
 
 function SurveyResults() {
-  const { role, state, flatQuestions, isSurveyComplete, dimensionScores, overallAverage, levelDistribution, resetSurvey, finishSurvey } = useSurvey();
+  const { role, state, assignmentId, flatQuestions, isSurveyComplete, dimensionScores, overallAverage, levelDistribution, resetSurvey, finishSurvey } = useSurvey();
   const request = useHttp();
   const dashboardRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,11 +23,16 @@ function SurveyResults() {
 
   const handleFinish = async () => {
     if (!isSurveyComplete || isSubmitting) return;
+    if (!assignmentId) {
+      setSubmissionError('شناسه اختصاص پیمایش در دسترس نیست. لطفاً صفحه را دوباره بارگذاری کنید.');
+      return;
+    }
     setIsSubmitting(true);
     setSubmissionError('');
 
     const payload = {
       role: role.id.toUpperCase(),
+      surveyAssignmentId: assignmentId,
       demographics: Object.entries(state.demographics).map(([fieldKey, value]) => ({ fieldKey, value: String(value) })),
       answers: flatQuestions.map((question) => ({
         questionId: question.id,
@@ -41,9 +46,15 @@ function SurveyResults() {
       finishSurvey();
     } catch (error) {
       setSubmissionError(
-        error.status === 0
-          ? 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.'
-          : (error.message || 'ارسال پرسشنامه با خطا مواجه شد. لطفاً دوباره تلاش کنید.')
+          error.status === 0
+              ? 'ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.'
+              : error.status === 403
+                  ? 'این پیمایش به حساب کاربری شما اختصاص داده نشده است.'
+                  : error.status === 404
+                      ? 'اختصاص این پیمایش دیگر موجود نیست. لطفاً صفحه را دوباره بارگذاری کنید.'
+                      : error.status === 409
+                          ? 'این پیمایش دیگر برای شما فعال نیست؛ ممکن است لغو یا منقضی شده یا قبلاً تکمیل شده باشد.'
+                          : (error.message || 'ارسال پرسشنامه با خطا مواجه شد. لطفاً دوباره تلاش کنید.')
       );
     } finally {
       setIsSubmitting(false);

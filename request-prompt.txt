@@ -1,0 +1,185 @@
+You are working in the React frontend repository:
+
+Frontend repo: https://github.com/yazdan-centos/survey-app-frontend.git
+Backend repo: https://github.com/yazdan-centos/survey-app-backend.git
+Your job is to update the frontend to match the latest backend changes, while strictly minimizing edits.
+
+Primary rule
+Do not over-edit.
+
+Do not refactor unrelated code.
+
+Do not rename existing abstractions unless required by the backend contract.
+
+Do not redesign pages/components.
+
+Do not “clean up” unrelated code.
+
+Do not replace working patterns with your preferred architecture.
+
+Only implement the smallest set of changes required for frontend/backend compatibility.
+
+Working mode
+Follow this sequence strictly:
+
+Step 1 — Inspect before editing
+First inspect:
+
+the current frontend codebase
+the latest backend state / latest backend commit diff
+existing API service patterns, route patterns, types/interfaces, hooks, pages, and components in the frontend
+Step 2 — Build a change plan
+Before editing, identify exactly:
+
+which backend contract changes affect the frontend
+which frontend files must change
+which frontend files must NOT change
+Step 3 — Apply minimal edits
+Then implement only the required changes.
+
+Step 4 — Final verification
+At the end, verify that:
+
+API paths match backend
+request payloads match backend
+response types match backend
+no unrelated files were changed
+Backend contract to support
+Use the backend as source of truth. The edited backend introduces these relevant features:
+
+1) Assignment API
+POST /api/survey-assignments
+DELETE /api/survey-assignments/{assignmentId}
+Request for create assignment includes:
+
+userIds: UUID[]
+surveyIds: UUID[]
+activeFrom?: instant
+activeUntil?: instant
+Response includes fields like:
+
+id
+user
+survey
+status
+assignedAt
+activeFrom
+activeUntil
+completedAt
+revokedAt
+createdAt
+updatedAt
+2) Authenticated user profile survey endpoints
+Base route:
+
+/api/users/me
+Endpoints:
+
+GET /api/users/me/active-surveys
+GET /api/users/me/participated-surveys
+GET /api/users/me/surveys/{surveyId}/results
+Important:
+
+/results is only an access check, not the actual result payload endpoint
+it returns success/failure for authorization, not survey results JSON
+3) Active survey response shape
+Active surveys return items with:
+
+survey
+assignmentId
+assignmentStatus
+activeFrom
+activeUntil
+Important:
+
+survey is not just an ID; it is a survey DTO object
+preserve/use assignmentId because response submission depends on it
+4) Participated survey response shape
+Participated surveys return items with:
+
+survey
+responseId
+submittedAt
+5) Survey response submission contract changed
+Survey response create/update now supports:
+
+role
+surveyAssignmentId
+answers
+demographics
+Important:
+
+for assigned user flows, submit surveyAssignmentId
+do not substitute surveyId for surveyAssignmentId
+6) Survey response details now may include
+id
+role
+respondentUsername
+userId
+surveyId
+surveyAssignmentId
+submittedAt
+answers
+demographics
+createdAt
+updatedAt
+Important:
+
+related IDs may be nullable in some cases
+do not assume all IDs are always present
+7) Existing survey CRUD remains separate
+Existing survey CRUD still uses /api/v1/surveys.
+
+Important:
+
+do not “normalize” new endpoints into /api/v1/...
+preserve existing survey CRUD logic unless a change is required
+What to implement in frontend
+Update only what is necessary for compatibility, likely in these areas if they exist:
+
+API client / axios service layer
+endpoint constants
+TypeScript types / interfaces
+hooks / query functions
+pages/components for:
+active surveys
+participated surveys
+survey submission
+result-access check
+empty/loading/error states only where required
+Hard constraints
+No broad refactor
+No styling-only edits
+No component rewrites unless required
+No route restructuring unless required
+No new abstraction layer unless clearly necessary
+No changing unrelated API calls
+No modifying working survey CRUD without contract need
+No guessing — derive contracts from backend
+Prefer updating existing files over creating new ones unless a new file is clearly justified
+Keep naming aligned with existing frontend style
+Specific anti-over-editing instructions
+If an existing API module already handles surveys, extend it minimally instead of replacing it
+If an existing page can render new data with small edits, do that instead of creating a new page
+If surveyAssignmentId is only needed in submission flow, inject it only there
+Do not change answer/demographic payload shape except where backend now requires assignment linkage
+Treat /api/users/me/active-surveys and /api/users/me/participated-surveys as arrays; support empty array without inventing fallback contracts
+Treat /api/users/me/surveys/{surveyId}/results as permission/access validation only
+Do not implement client-side assignment status business logic beyond rendering returned values
+Do not add client-side state machines for assignment lifecycle unless already present
+Preferred execution behavior
+Before editing, output a short plan in this format:
+
+Backend changes affecting frontend
+Frontend files to update
+Frontend files intentionally left untouched
+Minimal implementation strategy
+Then make the edits.
+
+After editing, output:
+
+modified files
+what changed in each file
+any assumptions
+any backend ambiguity
+confirmation that unrelated files were not changed

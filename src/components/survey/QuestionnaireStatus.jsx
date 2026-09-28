@@ -1,8 +1,10 @@
+import {Navigate} from 'react-router-dom';
 import {useSurvey} from '../../context/SurveyContext';
 
-export default function QuestionnaireStatus({children, requireRoleQuestions = true}) {
+export default function QuestionnaireStatus({children, requireRoleQuestions = true, allowSurveySelection = false}) {
     const {
         survey,
+        activeSurveys,
         questionsLoading,
         questionsError,
         reloadQuestions,
@@ -10,12 +12,16 @@ export default function QuestionnaireStatus({children, requireRoleQuestions = tr
         dimensionsWithQuestions
     } = useSurvey();
     let message = '';
+    // Several surveys are assigned and none is chosen yet: the profile page shows the picker.
+    const selectionPending = !questionsLoading && !questionsError && !survey && activeSurveys.length > 1;
+    if (selectionPending && allowSurveySelection) return children;
+    if (selectionPending) return <Navigate to="/" replace />;
     if (questionsLoading)
         message = 'در حال دریافت سؤال‌های پیمایش…';
     else if (questionsError)
         message = questionsError;
     else if (!survey)
-        message = 'در حال حاضر پیمایش فعالی وجود ندارد.';
+        message = 'در حال حاضر پیمایشی به شما اختصاص داده نشده است.';
     else if (!availableRoleIds.length)
         message = 'هنوز سؤالی برای این پیمایش ثبت نشده است.';
     else if (requireRoleQuestions && !dimensionsWithQuestions.length)
@@ -31,7 +37,7 @@ export default function QuestionnaireStatus({children, requireRoleQuestions = tr
                     onClick={reloadQuestions}
                     className="mt-4 rounded-lg bg-primary-800 px-4 py-2 text-sm font-semibold text-white">
                     دریافت
-                دوباره سؤال‌ها
+                    دوباره سؤال‌ها
                 </button>
             }
         </div>

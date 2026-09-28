@@ -37,54 +37,54 @@ export function SurveyProvider({ children }) {
   const navigate = useNavigate();
 
   const scopeState = useCallback((previous) => previous?.surveyId === survey?.id && previous?.respondentKey === respondentKey &&
-    (!authenticatedRoleId || previous.roleId === authenticatedRoleId)
-    ? previous : { ...initialState, surveyId: survey?.id ?? null, respondentKey,
-      roleId: authenticatedRoleId ?? (previous?.respondentKey === respondentKey ? previous.roleId : null) }, [survey?.id, respondentKey, authenticatedRoleId]);
+  (!authenticatedRoleId || previous.roleId === authenticatedRoleId)
+      ? previous : { ...initialState, surveyId: survey?.id ?? null, respondentKey,
+        roleId: authenticatedRoleId ?? (previous?.respondentKey === respondentKey ? previous.roleId : null) }, [survey?.id, respondentKey, authenticatedRoleId]);
   const scopedState = scopeState(storedState);
   const setState = useCallback((update) => setStoredState((previous) => ({
     ...update(scopeState(previous)), surveyId: survey?.id ?? null, respondentKey,
   })), [setStoredState, scopeState, survey?.id, respondentKey]);
   const role = scopedState.roleId ? getRoleById(scopedState.roleId) : null;
   const dimensionsWithQuestions = useMemo(
-    () => groupSurveyQuestions(questions, scopedState.roleId),
-    [questions, scopedState.roleId]
+      () => groupSurveyQuestions(questions, scopedState.roleId),
+      [questions, scopedState.roleId]
   );
   const flatQuestions = useMemo(
-    () => dimensionsWithQuestions.flatMap((dimension) => dimension.questions),
-    [dimensionsWithQuestions]
+      () => dimensionsWithQuestions.flatMap((dimension) => dimension.questions),
+      [dimensionsWithQuestions]
   );
   const answers = useMemo(() => Object.fromEntries(flatQuestions
-    .filter((question) => isValidQuestionAnswer(question, scopedState.answers?.[question.id], role?.allowSkip))
-    .map((question) => [question.id, scopedState.answers[question.id]])), [flatQuestions, scopedState.answers, role?.allowSkip]);
+      .filter((question) => isValidQuestionAnswer(question, scopedState.answers?.[question.id], role?.allowSkip))
+      .map((question) => [question.id, scopedState.answers[question.id]])), [flatQuestions, scopedState.answers, role?.allowSkip]);
   const state = { ...scopedState, answers };
 
   const setRole = useCallback(
-    (roleId) => {
-      setState(() => ({
-        ...initialState,
-        roleId,
-      }));
-    },
-    [setState]
+      (roleId) => {
+        setState(() => ({
+          ...initialState,
+          roleId,
+        }));
+      },
+      [setState]
   );
 
   const setDemographics = useCallback(
-    (demographics) => {
-      setState((prev) => ({ ...prev, demographics }));
-    },
-    [setState]
+      (demographics) => {
+        setState((prev) => ({ ...prev, demographics }));
+      },
+      [setState]
   );
 
   const answerQuestion = useCallback(
-    (questionId, value) => {
-      const question = flatQuestions.find((item) => item.id === questionId);
-      if (!question || !isValidQuestionAnswer(question, value, role?.allowSkip)) return;
-      setState((prev) => ({
-        ...prev,
-        answers: { ...prev.answers, [questionId]: value },
-      }));
-    },
-    [setState, flatQuestions, role?.allowSkip]
+      (questionId, value) => {
+        const question = flatQuestions.find((item) => item.id === questionId);
+        if (!question || !isValidQuestionAnswer(question, value, role?.allowSkip)) return;
+        setState((prev) => ({
+          ...prev,
+          answers: { ...prev.answers, [questionId]: value },
+        }));
+      },
+      [setState, flatQuestions, role?.allowSkip]
   );
 
   const acknowledgeManagerGuide = useCallback(() => {
@@ -92,13 +92,13 @@ export function SurveyProvider({ children }) {
   }, [setState]);
 
   const goToStep = useCallback(
-    (step) => {
-      if (step === 'results') {
-        setState((prev) => ({ ...prev, submittedAt: prev.submittedAt ?? new Date().toISOString() }));
-      }
-      navigate(stepToPath(step));
-    },
-    [navigate, setState]
+      (step) => {
+        if (step === 'results') {
+          setState((prev) => ({ ...prev, submittedAt: prev.submittedAt ?? new Date().toISOString() }));
+        }
+        navigate(stepToPath(step));
+      },
+      [navigate, setState]
   );
 
   const resetSurvey = useCallback(() => {
@@ -113,40 +113,40 @@ export function SurveyProvider({ children }) {
 
   // --- Step sequencing helpers -------------------------------------------------
   const stepOrder = useMemo(
-    () => ['profile', ...dimensionsWithQuestions.map((dimension) => dimension.key), 'results'],
-    [dimensionsWithQuestions]
+      () => ['profile', ...dimensionsWithQuestions.map((dimension) => dimension.key), 'results'],
+      [dimensionsWithQuestions]
   );
 
   const isDimensionComplete = useCallback(
-    (dimensionKey) => {
-      const dim = dimensionsWithQuestions.find((d) => d.key === dimensionKey);
-      if (!dim) return false;
-      return dim.questions.length > 0 && dim.questions.every((question) => state.answers[question.id] !== undefined);
-    },
-    [dimensionsWithQuestions, state.answers]
+      (dimensionKey) => {
+        const dim = dimensionsWithQuestions.find((d) => d.key === dimensionKey);
+        if (!dim) return false;
+        return dim.questions.length > 0 && dim.questions.every((question) => state.answers[question.id] !== undefined);
+      },
+      [dimensionsWithQuestions, state.answers]
   );
 
   const isSurveyComplete = useMemo(
-    () => flatQuestions.length > 0 && flatQuestions.every((question) => state.answers[question.id] !== undefined),
-    [flatQuestions, state.answers]
+      () => flatQuestions.length > 0 && flatQuestions.every((question) => state.answers[question.id] !== undefined),
+      [flatQuestions, state.answers]
   );
 
   const answeredCount = useMemo(
-    () => flatQuestions.filter((question) => state.answers[question.id] !== undefined).length,
-    [flatQuestions, state.answers]
+      () => flatQuestions.filter((question) => state.answers[question.id] !== undefined).length,
+      [flatQuestions, state.answers]
   );
 
   const progressPercent = flatQuestions.length
-    ? Math.round((answeredCount / flatQuestions.length) * 100)
-    : 0;
+      ? Math.round((answeredCount / flatQuestions.length) * 100)
+      : 0;
 
   // --- Scoring -----------------------------------------------------------------
   // Numeric answers (1-4) are averaged; 'skip' answers are excluded from the mean.
   const dimensionScores = useMemo(() => {
     return dimensionsWithQuestions.map((dim) => {
       const scored = dim.questions
-        .map((question) => state.answers[question.id])
-        .filter((v) => typeof v === 'number');
+          .map((question) => state.answers[question.id])
+          .filter((v) => typeof v === 'number');
       const total = dim.questions.length;
       const answered = dim.questions.filter((question) => state.answers[question.id] !== undefined).length;
       const average = scored.length ? scored.reduce((a, b) => a + b, 0) / scored.length : 0;
@@ -183,6 +183,9 @@ export function SurveyProvider({ children }) {
     state,
     role,
     survey,
+    assignmentId: questionnaire.assignmentId,
+    activeSurveys: questionnaire.activeSurveys,
+    selectAssignment: questionnaire.selectAssignment,
     questionsLoading: questionnaire.loading,
     questionsError: questionnaire.error,
     reloadQuestions: questionnaire.reload,
