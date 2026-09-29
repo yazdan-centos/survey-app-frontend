@@ -23,3 +23,50 @@
     @apply text-slate-400 dark:text-slate-500;
   }
 }
+
+/* Scoped calendar styles follow the admin form's light/dark theme. */
+.survey-date-picker.rmdp-wrapper,
+.survey-date-picker .rmdp-month-picker,
+.survey-date-picker .rmdp-year-picker {
+  @apply rounded-lg border border-slate-200 bg-white font-sans text-slate-900 shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100;
+}
+
+.survey-date-picker .rmdp-header-values,
+.survey-date-picker .rmdp-day {
+  @apply text-slate-800 dark:text-slate-100;
+}
+
+.survey-date-picker .rmdp-week-day {
+  @apply text-primary-700 dark:text-primary-300;
+}
+
+.survey-date-picker .rmdp-day.rmdp-deactive,
+.survey-date-picker .rmdp-day.rmdp-disabled {
+  @apply text-slate-400 dark:text-slate-600;
+}
+
+.survey-date-picker .rmdp-day.rmdp-today span {
+  @apply bg-primary-100 text-primary-900 dark:bg-primary-950 dark:text-primary-200;
+}
+
+.survey-date-picker .rmdp-day.rmdp-selected span:not(.highlight),
+.survey-date-picker .rmdp-day:not(.rmdp-day-hidden) span:hover,
+.survey-date-picker .rmdp-arrow-container:hover {
+  @apply bg-primary-800 text-white shadow-none;
+}
+
+.survey-date-picker .rmdp-arrow {
+  @apply border-primary-700 dark:border-primary-300;
+}
+
+.survey-date-picker .rmdp-arrow-container:hover .rmdp-arrow {
+  @apply border-white;
+}
+
+.survey-date-picker .rmdp-time-picker {
+  @apply border-t border-slate-200 dark:border-slate-700;
+}
+
+.survey-date-picker .rmdp-time-picker input {
+  @apply rounded bg-slate-50 font-sans text-slate-900 dark:bg-slate-800 dark:text-slate-100;
+}

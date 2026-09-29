@@ -5,11 +5,12 @@ import * as userService from '../../services/userService';
 import * as surveyAssignmentService from '../../services/surveyAssignmentService';
 import { responseDate } from '../../utils/responseDisplay';
 import SurveyStatusBadge from './SurveyStatusBadge';
+import ShamsiDateTimePicker from './ShamsiDateTimePicker';
+import { surveyDateToIso } from '../../utils/surveyDates';
 
 const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700';
 const normalize = (value) => String(value ?? '').replace(/ي/g, 'ی').replace(/ك/g, 'ک').toLocaleLowerCase().trim();
 const userLabel = (user) => user.displayName || `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() || user.fullName || user.username;
-const toIso = (value) => (value ? new Date(value).toISOString() : undefined);
 
 export default function AssignSurveyPanel({ survey, onClose }) {
     const request = useHttp();
@@ -18,8 +19,8 @@ export default function AssignSurveyPanel({ survey, onClose }) {
     const [loadError, setLoadError] = useState('');
     const [search, setSearch] = useState('');
     const [selectedIds, setSelectedIds] = useState(() => new Set());
-    const [activeFrom, setActiveFrom] = useState('');
-    const [activeUntil, setActiveUntil] = useState('');
+    const [activeFrom, setActiveFrom] = useState(null);
+    const [activeUntil, setActiveUntil] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [revokingId, setRevokingId] = useState(null);
     const [notice, setNotice] = useState(null); // { type: 'success' | 'error', text }
@@ -55,7 +56,16 @@ export default function AssignSurveyPanel({ survey, onClose }) {
             setNotice({ type: 'error', text: 'حداقل یک کاربر را انتخاب کنید.' });
             return;
         }
-        if (activeFrom && activeUntil && new Date(activeUntil) < new Date(activeFrom)) {
+        let activeFromIso;
+        let activeUntilIso;
+        try {
+            activeFromIso = surveyDateToIso(activeFrom);
+            activeUntilIso = surveyDateToIso(activeUntil);
+        } catch (error) {
+            setNotice({ type: 'error', text: error.message });
+            return;
+        }
+        if (activeFromIso && activeUntilIso && new Date(activeUntilIso) < new Date(activeFromIso)) {
             setNotice({ type: 'error', text: 'پایان بازه نمی‌تواند پیش از شروع آن باشد.' });
             return;
         }
@@ -66,12 +76,12 @@ export default function AssignSurveyPanel({ survey, onClose }) {
             const created = await surveyAssignmentService.assignSurveys(request, {
                 userIds: [...selectedIds],
                 surveyIds: [survey.id],
-                activeFrom: toIso(activeFrom),
-                activeUntil: toIso(activeUntil),
+                activeFrom: activeFromIso,
+                activeUntil: activeUntilIso,
             });
             setAssignments(created);
             setSelectedIds(new Set());
-            setNotice({ type: 'success', text: 'پیمایش برای کاربران انتخاب‌شده اختصاص داده شد.' });
+            setNotice({ type: 'success', text: 'پیمایش برای کاربران انتخاب ‌شده اختصاص داده شد.' });
         } catch (error) {
             setNotice({
                 type: 'error',
@@ -156,11 +166,11 @@ export default function AssignSurveyPanel({ survey, onClose }) {
                     <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                             <label htmlFor="assign-active-from" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">شروع بازه (اختیاری)</label>
-                            <input id="assign-active-from" type="datetime-local" value={activeFrom} onChange={(event) => setActiveFrom(event.target.value)} dir="ltr" className={inputClass} />
+                            <ShamsiDateTimePicker id="assign-active-from" value={activeFrom} onChange={setActiveFrom} disabled={submitting} />
                         </div>
                         <div>
                             <label htmlFor="assign-active-until" className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">پایان بازه (اختیاری)</label>
-                            <input id="assign-active-until" type="datetime-local" value={activeUntil} onChange={(event) => setActiveUntil(event.target.value)} dir="ltr" className={inputClass} />
+                            <ShamsiDateTimePicker id="assign-active-until" value={activeUntil} onChange={setActiveUntil} disabled={submitting} />
                         </div>
                     </div>
 

@@ -1,0 +1,36 @@
+# Project Context Summary
+
+## Technical Details
+# Project Summary: worldclass-survey
+
+## Overview
+- **Type**: JAVASCRIPT NPM
+- **Languages**: JavaScript, JavaScript/React
+- **Frameworks**: React
+- **Build Tools**: npm
+
+## Project Structure
+- **Total Files**: 135
+- **Total Directories**: 25
+- **Main Directories**: dist, public, src, tests
+- **Has Tests**: Yes
+- **Has Documentation**: Yes
+- **Has CI/CD**: No
+
+## Key Dependencies
+### npm
+- react-dom
+- xlsx
+- jspdf
+- react-router-dom
+- lucide-react
+- react-multi-date-picker
+- react
+- recharts
+- html2canvas
+- styled-components
+
+## Git Information
+- **Current Branch**: main
+- **Uncommitted Changes**: No
+
