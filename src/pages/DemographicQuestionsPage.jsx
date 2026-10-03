@@ -172,7 +172,7 @@ export default function DemographicQuestionsPage() {
                 <tbody>
                   {visibleQuestions.map((question) => (
                     <tr key={question.id} className="border-t border-slate-100 align-top dark:border-slate-800">
-                      <td className="px-4 py-3"><span dir="ltr">{question.groupKey}</span></td>
+                      <td className="px-4 py-3"><span dir="auto">{knownLabels.get(question.groupKey) || question.groupKey}</span></td>
                       <td className="max-w-sm break-words px-4 py-3 whitespace-pre-wrap">{question.question}</td>
                       <td className="px-4 py-3 whitespace-nowrap">{typeLabel(question.type)}</td>
                       <td className="px-4 py-3">{question.displayOrder}</td>

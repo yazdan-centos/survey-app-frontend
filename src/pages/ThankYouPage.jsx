@@ -1,8 +1,10 @@
-import { CheckCircle2, RotateCcw } from 'lucide-react';
-import { useSurvey } from '../context/SurveyContext';
+import { CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ThankYouPage() {
-  const { resetSurvey } = useSurvey();
+  const navigate = useNavigate();
+
+  const handleContinue = () => navigate('/');
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center justify-center px-4 py-12 sm:px-6">
@@ -14,11 +16,10 @@ export default function ThankYouPage() {
         </p>
         <button
           type="button"
-          onClick={resetSurvey}
+          onClick={handleContinue}
           className="mt-8 inline-flex items-center gap-2 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
         >
-          <RotateCcw size={16} />
-          شروع پرسشنامه جدید
+          بازگشت به صفحه اصلی
         </button>
       </div>
     </div>

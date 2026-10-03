@@ -8,7 +8,7 @@ const MAX_TYPE = 20;
 // the backend, so this is only used to suggest sensible values in the UI.
 export const KNOWN_GROUP_KEYS = [
   { value: 'managers', label: 'معاونین و مدیران' },
-  { value: 'board', label: 'اعضای هیأت مدیره' },
+  { value: 'board', label: 'هیئت مدیره' },
   { value: 'stakeholders', label: 'مشتریان و پیمانکاران (ذی‌نفعان)' },
 ];
 

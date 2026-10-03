@@ -39,26 +39,34 @@ export default function ProfilePage() {
               </p>
             </div>
 
-            {activeSurveys.length > 1 && (
+            {activeSurveys.length > 0 && (
                 <div className="mb-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-6">
                   <h3 className="mb-4 text-sm font-semibold text-slate-700 dark:text-slate-300">پیمایش‌های اختصاص‌داده‌شده به شما</h3>
                   <ul className="space-y-3">
                     {activeSurveys.map((item) => {
                       const selected = item.assignmentId === assignmentId;
+                      const isCompleted = item.assignmentStatus === 'COMPLETED';
+                      const linkColorClass = isCompleted
+                        ? 'text-purple-600 dark:text-purple-400'
+                        : 'text-[#1E90FF] dark:text-[#1E90FF]';
+                      
                       return (
                           <li key={item.assignmentId}>
                             <button
                                 type="button"
                                 aria-pressed={selected}
+                                disabled={isCompleted}
                                 onClick={() => selectAssignment(item.assignmentId)}
                                 className={`flex w-full flex-wrap items-center justify-between gap-3 rounded-xl border p-4 text-right transition-colors ${
                                     selected
                                         ? 'border-primary-700 bg-primary-50 dark:bg-slate-800'
                                         : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                } ${
+                                    isCompleted ? 'cursor-default opacity-75' : ''
                                 }`}
                             >
                         <span className="min-w-0">
-                          <span className="block break-words font-semibold text-slate-900 dark:text-slate-100">{item.survey.title}</span>
+                          <span className={`block break-words font-semibold ${linkColorClass}`}>{item.survey.title}</span>
                           <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
                             نسخه {item.survey.version || '—'} · شروع: {responseDate(item.activeFrom)} · پایان: {responseDate(item.activeUntil)}
                           </span>

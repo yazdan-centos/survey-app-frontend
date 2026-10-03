@@ -10,9 +10,16 @@ import {
   ChevronRight,
   Layers,
   ListTree,
+  BookOpen,
 } from 'lucide-react';
 
 const navigationItems = [
+  {
+    to: '/admin/guides',
+    label: 'مدیریت راهنماها',
+    icon: BookOpen,
+    description: 'ایجاد و ویرایش راهنمای پیمایش',
+  },
   {
     to: '/dashboard',
     label: 'داشبورد',

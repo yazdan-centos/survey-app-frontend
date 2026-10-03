@@ -12,6 +12,8 @@ import AdminQuestionsPage from './pages/AdminQuestionsPage';
 import AdminSurveysPage from './pages/AdminSurveysPage';
 import AdminDimensionsPage from './pages/AdminDimensionsPage';
 import AdminCriteriaPage from './pages/AdminCriteriaPage';
+import AdminGuidesPage from './pages/AdminGuidesPage';
+import { GuideList } from './components/guides';
 import DemographicQuestionsPage from './pages/DemographicQuestionsPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -21,6 +23,7 @@ import ReportsPage from './pages/ReportsPage';
 import { useAuth } from './hooks/useAuth';
 import { getPostLoginPath, isAdmin } from './utils/auth';
 import QuestionDataTable from "./components/QuestionDataTable/QuestionDataTable.jsx";
+import SurveyDimensionChart from "./components/survey/charts/SurveyDimensionChart.jsx";
 
 function AuthGuard() {
     const { isAuthenticated } = useAuth();
@@ -86,10 +89,13 @@ function AppShell() {
                             <Route path="/admin/surveys" element={<AdminSurveysPage />} />
                             <Route path="/admin/dimensions" element={<AdminDimensionsPage />} />
                             <Route path="/admin/criteria" element={<AdminCriteriaPage />} />
+                            <Route path="/admin/guides" element={<GuideList />} />
+                            <Route path="/admin/guides/new" element={<AdminGuidesPage />} />
+                            <Route path="/admin/guides/:guideId/edit" element={<AdminGuidesPage />} />
                             <Route path="/admin/users" element={<UsersPage />} />
                             <Route path="/admin/responses" element={<ResponsesPage />} />
                             <Route path="/admin/reports" element={<ReportsPage />} />
-                            <Route path="/admin/settings" element={<div className="p-8"><h2 className="text-2xl font-bold">تنظیمات - به زودی</h2></div>} />
+                            <Route path="/admin/settings" element={<SurveyDimensionChart/>} />
                             </Route>
                         </Route>
                         <Route path="*" element={<Navigate to="/" replace />} />

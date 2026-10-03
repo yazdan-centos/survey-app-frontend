@@ -11,6 +11,8 @@ export const API_PATHS = {
   currentUser: '/api/v1/auth/me',
 
   // Questions
+  guides: '/api/guides',
+  guide: (id) => `/api/guides/${encodeURIComponent(id)}`,
   questions: '/api/questions',
   exportQuestions: (surveyId) => `/api/questions/export?surveyId=${surveyId}`,
   importQuestions: (surveyId) => `/api/questions/import?surveyId=${surveyId}`,
@@ -59,4 +61,7 @@ export const API_PATHS = {
   searchUsers: '/api/users/search',
   syncUsersFromAD: '/api/users/sync/ad',
   userImportTemplate: '/api/users/template',
+
+  // Survey Results
+  surveyResults: (surveyId) => `/api/surveys/${surveyId}/results`,
 };
